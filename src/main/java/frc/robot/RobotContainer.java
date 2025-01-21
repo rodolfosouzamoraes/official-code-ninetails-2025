@@ -107,8 +107,8 @@ public class RobotContainer
                                   () -> -MathUtil.applyDeadband(driverXbox.getRightX(),
                                                               OperatorConstants.RIGHT_X_DEADBAND));
     Command baseDriveCommand = drivebase.driveCommand(        
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY()*-1*0.5, OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX()*-1*0.5, OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY()*0.5, OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX()*0.5, OperatorConstants.LEFT_X_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getRightX()*0.75*-1,.1));
 
         Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
