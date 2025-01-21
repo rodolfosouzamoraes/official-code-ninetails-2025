@@ -1,0 +1,2 @@
+Link para configurar o Gear ratio
+https://docs.yagsl.com/configuring-yagsl/standard-conversion-factors
