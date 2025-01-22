@@ -9,6 +9,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Units;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -21,6 +23,8 @@ import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import java.util.function.DoubleSupplier;
+
 import swervelib.SwerveInputStream;
 
 /**
@@ -58,6 +62,14 @@ public class RobotContainer
    */
   private void configureBindings()
   {
+
+
+
+    driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+
+
+
+
     /*
      
     driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -69,10 +81,10 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.aimAtSpeaker(2));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
     * 
      */
+
   }
 
   /**
@@ -106,17 +118,35 @@ public class RobotContainer
                                                               OperatorConstants.RIGHT_X_DEADBAND),
                                   () -> -MathUtil.applyDeadband(driverXbox.getRightX(),
                                                               OperatorConstants.RIGHT_X_DEADBAND));
+
+                                                              
     Command baseDriveCommand = drivebase.driveCommand(        
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> MathUtil.applyDeadband(driverXbox.getRightX()*-1,.1));
 
         Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
-      () -> MathUtil.applyDeadband(driverXbox.getLeftY()*0.75, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftX()*0.75, OperatorConstants.LEFT_X_DEADBAND),
+      () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
       () -> driverXbox.getRightX(),
       () -> driverXbox.getRightY());
 
-        drivebase.setDefaultCommand(baseDriveCommand);
+        // drivebase.setDefaultCommand(baseDriveCommand);
+
+
+    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
+      SwerveInputStream.of(drivebase.getSwerveDrive(),
+    () -> driverXbox.getLeftY() * -1,
+    () -> driverXbox.getLeftX() * -1)
+          .withControllerRotationAxis(driverXbox::getRightX)
+      .deadband(OperatorConstants.DEADBAND)
+      .scaleTranslation(0.8)
+      .allianceRelativeControl(true));
+
+
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+
+
+
   }
 }
