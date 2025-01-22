@@ -62,14 +62,14 @@ public class RobotContainer
    */
   private void configureBindings()
   {
+    driverXbox.y().whileTrue(drivebase.autoAlign(
+
+    () -> driverXbox.getLeftY() * -1,
+    () -> driverXbox.getLeftX() * -1
+    ));
 
 
-
-    driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-
-
-
-
+    
     /*
      
     driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -145,8 +145,5 @@ public class RobotContainer
 
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-
-
-
   }
 }
