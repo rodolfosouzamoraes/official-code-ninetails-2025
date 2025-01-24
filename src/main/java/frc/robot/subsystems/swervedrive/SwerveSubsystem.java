@@ -31,12 +31,15 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.vision.LimelightHelpers;
 
 import java.io.File;
@@ -757,11 +760,20 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
 
-  PIDController controller = new PIDController(4, 0, 0.5);
+  PIDController controllerHeading = new PIDController(2, 0.01, 0);
+  PIDController controllerYSpeed = new PIDController(6, 0, 0);
 
-  public Command autoAlign(DoubleSupplier xSpeed, DoubleSupplier ySpeed) {
-    swerveDrive.setMaximumAllowableSpeeds(5, 8);
-    DoubleSupplier angularRotation =  () -> controller.calculate(Units.degreesToRadians(LimelightHelpers.getTX("limelight")), 0.0);
+  public Command autoAlign(DoubleSupplier xSpeed) {
+    // if (LimelightHelpers.getTargetCount("limelight") == 0) {
+    //   RobotContainer.getDriverXbox().getHID().setRumble(RumbleType.kLeftRumble, 1);
+    // } else {
+    //   RobotContainer.getDriverXbox().getHID().setRumble(RumbleType.kRightRumble, 0);
+    // }
+
+
+    swerveDrive.setMaximumAllowableSpeeds(2, 4);
+    DoubleSupplier angularRotation =  () -> -controllerHeading.calculate(Units.degreesToRadians(getHeading().getDegrees()), 0.0);
+    DoubleSupplier ySpeed = () -> -controllerYSpeed.calculate(Units.degreesToRadians(LimelightHelpers.getTX("limelight")), 0.0);
     return this.driveCommand(xSpeed, ySpeed, angularRotation);
     // I'm fairly sure that degreesToRadians is necessary since you are enabling continous output using radians, but if someone could clarify that, that would be nice
   }
