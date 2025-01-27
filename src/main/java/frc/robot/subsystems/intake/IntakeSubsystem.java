@@ -19,35 +19,64 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-  private SparkMax onlyMotor;
-  private SparkMaxConfig intakeConfig;
+  private SparkMax leftAlgaeMotor;
+  private SparkMax rightAlgaeMotor;
+  private SparkMax coralMotor;
+  private SparkMax clawCoralMotor;
+  
+
+  private SparkMaxConfig leftAlgaeConfig;
+  private SparkMaxConfig rightAlgaeConfig;
+  private SparkMaxConfig coralConfig;
 
   public IntakeSubsystem() {
 
-    onlyMotor = new SparkMax(16, MotorType.kBrushless);
-    
-    intakeConfig = new SparkMaxConfig();
-    intakeConfig.smartCurrentLimit(40, 60);
-    intakeConfig.idleMode(IdleMode.kBrake)
+    leftAlgaeMotor = new SparkMax(16, MotorType.kBrushless);
+    leftAlgaeConfig = new SparkMaxConfig();
+
+    leftAlgaeConfig
+    .smartCurrentLimit(40, 60)
+    .idleMode(IdleMode.kBrake)
     .inverted(false);
-    onlyMotor.configure(intakeConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    leftAlgaeMotor.configure(leftAlgaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
+    rightAlgaeMotor = new SparkMax(17, MotorType.kBrushless);
+    rightAlgaeConfig = new SparkMaxConfig();
+
+    rightAlgaeConfig
+    .smartCurrentLimit(40,60)
+    .idleMode(IdleMode.kBrake)
+    .inverted(true);
+    rightAlgaeMotor.configure(rightAlgaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    coralMotor = new SparkMax(18, MotorType.kBrushless);
+    clawCoralMotor = new SparkMax(19, MotorType.kBrushless);
+    coralConfig = new SparkMaxConfig();
+
+    coralConfig
+    .smartCurrentLimit(40, 60)
+    .idleMode(IdleMode.kBrake)
+    .inverted(false);
+    coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    clawCoralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+
   }
 
   @Override
   public void periodic() {
   }
 
-  public void setCurrentPoint(double current) {
-    onlyMotor.set(current);
-  }
+  // public void setCurrentPoint(double current) {
+  //   onlyMotor.set(current);
+  // }
 
-  public void stopIntake() {
-    onlyMotor.stopMotor();
-  }
+  // public void stopIntake() {
+  //   onlyMotor.stopMotor();
+  // }
    
-  public RelativeEncoder getVelocityEncoder() {
-    return onlyMotor.getEncoder();
-  }
+  // public RelativeEncoder getVelocityEncoder() {
+  //   return onlyMotor.getEncoder();
+  // }
 
 }

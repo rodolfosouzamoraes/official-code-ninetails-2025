@@ -73,6 +73,9 @@ public class RobotContainer
     ));
 
 
+  driverXbox.a().whileTrue(drivebase.autoAlignTo90(
+    () -> driverXbox.getLeftY() * -1
+  ));
     
     /*
      
