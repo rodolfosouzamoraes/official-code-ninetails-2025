@@ -12,6 +12,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,7 +21,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private SparkMax leftElevator;
   private SparkMax rightElevator;
+  
   private Encoder elevator_Encoder;
+  private final ElevatorFeedforward elevatorFeedforward;
+  private final PIDController elevatorPID;
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
@@ -35,7 +40,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     leftElevator.configure(configLeftElevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
-    
     rightElevator = new SparkMax(15, MotorType.kBrushless);
     SparkMaxConfig configRightElevator = new SparkMaxConfig();
 
@@ -47,6 +51,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     rightElevator.configure(configLeftElevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     elevator_Encoder = new Encoder(0, 1);
+    elevatorFeedforward = new ElevatorFeedforward(0, 0, 0);
+    elevatorPID = new PIDController(0, 0, 0);
+
   }
 
   @Override

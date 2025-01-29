@@ -6,28 +6,19 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.Units;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
-import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+
 import java.io.File;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.function.DoubleSupplier;
 
 import swervelib.SwerveInputStream;
 
@@ -67,15 +58,19 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    driverXbox.y().whileTrue(drivebase.autoAlign(
 
-      () -> driverXbox.getLeftY() * -1
+
+    driverXbox.rightBumper().whileTrue(drivebase.autoAlign(
+      () -> driverXbox.getLeftY() * -1,
+      () -> driverXbox.getLeftX(),
+      -125
     ));
 
-
-  driverXbox.a().whileTrue(drivebase.autoAlignTo90(
-    () -> driverXbox.getLeftY() * -1
-  ));
+    driverXbox.leftBumper().whileTrue(drivebase.autoAlign(
+      () -> driverXbox.getLeftY() * -1,
+      () -> driverXbox.getLeftX(),
+      125
+    ));
     
     /*
      
@@ -157,9 +152,5 @@ public class RobotContainer
 
   public static CommandXboxController getDriverXbox() {
     return driverXbox;
-  }
-
-  public static XboxController getDriver() {
-    return driverController;
   }
 }

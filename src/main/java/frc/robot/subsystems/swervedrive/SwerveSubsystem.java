@@ -146,6 +146,8 @@ public class SwerveSubsystem extends SubsystemBase
     {
       swerveDrive.updateOdometry();
     }
+
+
   }
 
   @Override
@@ -759,44 +761,30 @@ public class SwerveSubsystem extends SubsystemBase
     return swerveDrive;
   }
 
-  PIDController controllerHeading = new PIDController(2, 0.01, 0);
+  PIDController controllerHeading = new PIDController(0.8, 0, 0.02);
   PIDController controllerYSpeed = new PIDController(6, 0, 0);
 
-  public Command autoAlign(DoubleSupplier xSpeed) {
+  public Command autoAlign(DoubleSupplier xSpeed, DoubleSupplier ySpeed, double targetHeading) {
 
     swerveDrive.setMaximumAllowableSpeeds(2, 4);
     
-    DoubleSupplier angularRotation =  () -> -controllerHeading.calculate
-    (Units.degreesToRadians(getHeading().getDegrees()), Units.degreesToRadians(0));
+    DoubleSupplier angularRotation =  () -> -controllerHeading.calculate(
+      Units.degreesToRadians(getHeading().getDegrees()), Units.degreesToRadians(targetHeading)
+      );
+    
 
-    DoubleSupplier ySpeed = () -> -controllerYSpeed.calculate
-    (Units.degreesToRadians(LimelightHelpers.getTX("limelight")), 0.0);
+    if (!LimelightHelpers.getTV("limelight")) {
+      controllerHeading.setPID(2, 0.01, 0);
+      ySpeed = () -> -controllerYSpeed.calculate(
+        Units.degreesToRadians(LimelightHelpers.getTX("limelight")), 0.0);
+    } else {
+      controllerHeading.setPID(0.8, 0, 0.02);
+
+    }
+
 
     return this.driveCommand(xSpeed, ySpeed, angularRotation);
     // I'm fairly sure that degreesToRadians is necessary since you are enabling continous output using radians, but if someone could clarify that, that would be nice
   
   }
-
-  PIDController controllerTo35 = new PIDController(2, 0.02, 0.2);
-  
-  public Command autoAlignToStation(DoubleSupplier xSpeed) {
-
-    DoubleSupplier angularRotation35 = () -> - controllerTo35.calculate
-    (Units.degreesToRadians(getHeading().getDegrees()), Units.degreesToRadians(35));
-
-    return this.driveCommand(() -> 0, () -> 0, angularRotation35);
-
-  }
-
-  PIDController controllerTo90 = new PIDController(2, 0.02, 0.2);
-
-
-  public Command autoAlignTo90(DoubleSupplier xSpeed) {
-
-    DoubleSupplier angularRotation90 =  () -> -controllerTo90.calculate
-    (Units.degreesToRadians(getHeading().getDegrees()), Units.degreesToRadians(90));
-
-    return this.driveCommand(() -> 0, () -> 0, angularRotation90);
-  }
-
 }

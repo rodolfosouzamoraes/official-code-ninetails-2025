@@ -13,6 +13,7 @@ import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,12 +23,17 @@ public class IntakeSubsystem extends SubsystemBase {
   private SparkMax leftAlgaeMotor;
   private SparkMax rightAlgaeMotor;
   private SparkMax coralMotor;
+
   private SparkMax clawCoralMotor;
-  
+  private SparkMax clawAlgaeMotor;
+  private Encoder clawAlgae_Encoder;
+  private Encoder clawCoral_Encoder;
+  private DigitalInput infra_Sensor;
 
   private SparkMaxConfig leftAlgaeConfig;
   private SparkMaxConfig rightAlgaeConfig;
   private SparkMaxConfig coralConfig;
+  
 
   public IntakeSubsystem() {
 
@@ -59,7 +65,6 @@ public class IntakeSubsystem extends SubsystemBase {
     .inverted(false);
     coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     clawCoralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
 
   }
 
