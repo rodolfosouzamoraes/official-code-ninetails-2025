@@ -25,10 +25,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private SparkMax coralMotor;
 
   private SparkMax clawCoralMotor;
-  private SparkMax clawAlgaeMotor;
-  private Encoder clawAlgae_Encoder;
   private Encoder clawCoral_Encoder;
-  private DigitalInput infra_Sensor;
 
   private SparkMaxConfig leftAlgaeConfig;
   private SparkMaxConfig rightAlgaeConfig;

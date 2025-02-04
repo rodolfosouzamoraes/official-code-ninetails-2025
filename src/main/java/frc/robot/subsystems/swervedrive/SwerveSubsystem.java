@@ -281,6 +281,9 @@ public class SwerveSubsystem extends SubsystemBase
   public Command getAutonomousCommand(String pathName)
   {
     // Create a path following command using AutoBuilder. This will also trigger event markers.
+
+    swerveDrive.field.setRobotPose(getPose());
+
     return new PathPlannerAuto(pathName);
   }
 
@@ -781,10 +784,12 @@ public class SwerveSubsystem extends SubsystemBase
       controllerHeading.setPID(0.8, 0, 0.02);
 
     }
-
-
     return this.driveCommand(xSpeed, ySpeed, angularRotation);
     // I'm fairly sure that degreesToRadians is necessary since you are enabling continous output using radians, but if someone could clarify that, that would be nice
   
   }
+
+
+
+  
 }
