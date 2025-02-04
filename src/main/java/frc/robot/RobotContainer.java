@@ -4,48 +4,65 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.ButtonMonitor;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.math.MathUtil;
-
+import edu.wpi.first.units.measure.AngularMomentum;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ButtonConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.elevator.GoToHeight;
+import frc.robot.commands.intake.GoToAngleWrist;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.intake.IntakeAlgaeSubsystem;
+import frc.robot.subsystems.intake.IntakeCoralSubsystem;
+import frc.robot.subsystems.intake.WristSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 import java.io.File;
 
 import swervelib.SwerveInputStream;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
- * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
- * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer
 {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final static CommandXboxController driverXbox = new CommandXboxController(0);
   final static XboxController driverController = new XboxController(0);
+
+  final static CommandGenericHID operatorHID = new CommandGenericHID(1);
+  final static GenericHID operatorController = new GenericHID(1);
+  
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  private final ElevatorSubsystem elevator = new ElevatorSubsystem();
+  private final IntakeAlgaeSubsystem intakeAlgae = new IntakeAlgaeSubsystem();
+  private final IntakeCoralSubsystem intakeCoral = new IntakeCoralSubsystem();
+  private final WristSubsystem wrist = new WristSubsystem();
 
-   private final Field2d field;
+
+  private final Field2d field;
 
   public RobotContainer()
   {
@@ -81,16 +98,15 @@ public class RobotContainer
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
-   * named factories in {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
-   * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
-   */
+
   private void configureBindings()
   {
+    driverControllerBindings();
+    operatorControllerBindings(); 
+  }
 
+
+  private void driverControllerBindings() {
 
     driverXbox.rightBumper().whileTrue(drivebase.autoAlign(
       () -> driverXbox.getLeftY() * -1,
@@ -103,29 +119,45 @@ public class RobotContainer
       () -> driverXbox.getLeftX(),
       125
     ));
+  }
+
+  private void operatorControllerBindings() {
+    elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
+    intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.01), intakeAlgae));
+    intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0), intakeCoral));
+
     
-    /*
-     
-    driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
-      driverXbox.y().whileTrue(drivebase.aimAtSpeaker(2));
-      driverXbox.start().whileTrue(Commands.none());
-      driverXbox.back().whileTrue(Commands.none());
-      driverXbox.rightBumper().onTrue(Commands.none());
-    * 
-     */
+    operatorHID.button(ButtonConstants.COLLECT_ALGAE).whileTrue(
+      new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.5), intakeAlgae)
+    );    
+
+    operatorHID.button(ButtonConstants.COLLECT_CORAL).whileTrue(
+      new RunCommand(() -> intakeCoral.setCoralSpeed(-0.5), intakeCoral)
+    );
+
+    operatorHID.button(ButtonConstants.SHOOTER_ALGAE).whileTrue(
+      new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae)
+    );
+
+    operatorHID.button(ButtonConstants.SHOOTER_CORAL).whileTrue(
+      new RunCommand(() -> intakeCoral.setCoralSpeed(0.5), intakeCoral)
+    );
+
+    operatorHID.button(ButtonConstants.GO_TO_L1).whileTrue(
+      new ParallelCommandGroup(
+        new GoToHeight(elevator, ElevatorConstants.L1_HEIGHT),
+        new GoToAngleWrist(wrist, 20)
+      ));
+    
+    operatorHID.button(ButtonConstants.GO_TO_L2).whileTrue(getAutonomousCommand());
+    operatorHID.button(ButtonConstants.GO_TO_L3).whileTrue(getAutonomousCommand());
+    operatorHID.button(ButtonConstants.GO_TO_L4).whileTrue(getAutonomousCommand());
+
+    operatorHID.button(ButtonConstants.END_GAME).whileTrue(getAutonomousCommand());    
 
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
@@ -177,8 +209,8 @@ public class RobotContainer
       .scaleTranslation(0.8)
       .allianceRelativeControl(true));
 
-
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    
   }
 
 

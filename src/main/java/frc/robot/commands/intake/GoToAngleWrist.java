@@ -5,29 +5,38 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.intake.WristSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlgaeShooter extends Command {
-  /** Creates a new AlgaeShooter. */
-  public AlgaeShooter() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class GoToAngleWrist extends Command {
+  private final WristSubsystem wrist;
+  private double setPoint;
+
+
+  public GoToAngleWrist(WristSubsystem wrist, double setPoint) {
+    this.wrist = wrist;
+    this.setPoint = setPoint;
+
+    addRequirements(wrist);
   }
 
-  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    wrist.setSetpoint(setPoint);
+  }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
-  // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) { }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (wrist.atSetpoint()) {
+      return true;
+    }
     return false;
   }
 }

@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.elevator;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -14,55 +13,90 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-  private SparkMax leftElevator;
-  private SparkMax rightElevator;
-  
-  private Encoder elevator_Encoder;
-  private final ElevatorFeedforward elevatorFeedforward;
-  private final PIDController elevatorPID;
+  private SparkMax leftMotor;
+  private SparkMax rightMotor;
+
+  private SparkMaxConfig rightMotorConfig;
+  private SparkMaxConfig leftMotorConfig;
+
+  private final Encoder encoder;
+
+
+  private final TrapezoidProfile.Constraints constraints;
+  private final ProfiledPIDController pidController;
+  private final ElevatorFeedforward feedforward;
+
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
 
-    leftElevator = new SparkMax(14, MotorType.kBrushless);
-    SparkMaxConfig configLeftElevator = new SparkMaxConfig();
+    leftMotor = new SparkMax(ElevatorConstants.ID_LEFT_MOTOR, MotorType.kBrushless);
+    rightMotor = new SparkMax(ElevatorConstants.ID_RIGHT_MOTOR, MotorType.kBrushless);
 
-    configLeftElevator = new SparkMaxConfig();
-    configLeftElevator
+    leftMotorConfig = new SparkMaxConfig();
+    
+    leftMotorConfig
     .smartCurrentLimit(40, 60)
     .idleMode(IdleMode.kBrake)
     .inverted(false);
-
-    leftElevator.configure(configLeftElevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
-    rightElevator = new SparkMax(15, MotorType.kBrushless);
-    SparkMaxConfig configRightElevator = new SparkMaxConfig();
+    leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    configRightElevator
+    rightMotorConfig = new SparkMaxConfig();
+
+    rightMotorConfig
     .smartCurrentLimit(40, 60)
     .idleMode(IdleMode.kBrake)
-    .inverted(true);
-    
-    rightElevator.configure(configLeftElevator, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    .inverted(true)
+    .follow(ElevatorConstants.ID_LEFT_MOTOR);
+    rightMotor.configure(rightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    elevator_Encoder = new Encoder(0, 1);
-    elevatorFeedforward = new ElevatorFeedforward(0, 0, 0);
-    elevatorPID = new PIDController(0, 0, 0);
 
+    encoder = new Encoder(ElevatorConstants.CHANNEL_A, ElevatorConstants.CHANNEL_B, true, EncodingType.k4X);
+    encoder.setDistancePerPulse(0.008);
+
+    constraints = new TrapezoidProfile.Constraints(0.37, 0.188468);
+    pidController = new ProfiledPIDController(0.005, 0, 0, constraints, 0);
+    feedforward = new ElevatorFeedforward(0, 0.22, 32.04, 0.02);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("EncoderNumber", getEncoderDistance());
   }
 
-  public double getEncoder() {
-   return elevator_Encoder.get();
+
+  public void setSetpoint(double goal) {
+    pidController.setGoal(goal);
+  }
+
+  public void controlElevator() {
+    leftMotor.setVoltage(
+      pidController.calculate(getEncoderDistance())
+      + feedforward.calculate(pidController.getSetpoint().velocity)
+    );
+  }
+
+  public double getEncoderDistance() {
+    return encoder.getDistance();
+  }
+
+  public void resetEncoder() {
+    encoder.reset();
+  }
+
+  public boolean atSetpoint() {
+    return pidController.atSetpoint();
   }
 
 }
