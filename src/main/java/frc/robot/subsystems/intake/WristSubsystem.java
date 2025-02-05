@@ -1,38 +1,28 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.intake;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
 
 public class WristSubsystem extends SubsystemBase {
   
   private SparkMax wristMotor;
   private SparkMaxConfig wristConfig;
-  private SparkClosedLoopController closed;
+  private SparkClosedLoopController closed_controller;
   private double setPoint;
   
-  /** Creates a new WristSubsystem. */
   public WristSubsystem() {
     
-    wristMotor = new SparkMax(0, MotorType.kBrushless);
+    wristMotor = new SparkMax(IntakeConstants.ID_WRIST_MOTOR, MotorType.kBrushless);
     wristConfig = new SparkMaxConfig();
     
     wristConfig
@@ -41,25 +31,30 @@ public class WristSubsystem extends SubsystemBase {
     .inverted(false);
     wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+    wristConfig.closedLoop.maxMotion
+      .maxVelocity(5000)
+      .maxAcceleration(2500);
 
     wristConfig.closedLoop
-      .pid(0, 0, 0)
+      .pidf(0.00018, 0, 0.00002, 0.00019999999494757503)
       .outputRange(0, 0);
+    closed_controller = wristMotor.getClosedLoopController();
 
-    closed = wristMotor.getClosedLoopController();
-      
+    wristConfig.softLimit.forwardSoftLimit(1.2);  // Limite do motor para a frente
+    wristConfig.softLimit.reverseSoftLimit(-3);  // Limite do motor ao contrário
+
+    // wristConfig.encoder.positionConversionFactor(1/16);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  }
-  
-  public void setSetpoint(double goal) {
-    closed.setReference(goal, ControlType.kMAXMotionPositionControl);
+    SmartDashboard.putNumber("Encoder Wrist", getEncoderDistance());
   }
 
-  public void controlWrist() {}
+  public void controlWrist(double setpoint) {
+    closed_controller.setReference(setpoint, ControlType.kMAXMotionPositionControl);
+  }
 
   public double getEncoderDistance() {
     return wristMotor.getEncoder().getPosition();

@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.intake;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,6 +8,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
 
 public class IntakeAlgaeSubsystem extends SubsystemBase {
   private SparkMax leftAlgaeMotor;
@@ -20,12 +17,9 @@ public class IntakeAlgaeSubsystem extends SubsystemBase {
   private SparkMaxConfig leftAlgaeConfig;
   private SparkMaxConfig rightAlgaeConfig;
   
-  
-  
-  /** Creates a new IntakeAlgaeSubsystem. */
   public IntakeAlgaeSubsystem() {
 
-    leftAlgaeMotor = new SparkMax(16, MotorType.kBrushless);
+    leftAlgaeMotor = new SparkMax(IntakeConstants.ID_LEFT_ALGAE_MOTOR, MotorType.kBrushless);
     leftAlgaeConfig = new SparkMaxConfig();
 
     leftAlgaeConfig
@@ -34,14 +28,14 @@ public class IntakeAlgaeSubsystem extends SubsystemBase {
     .inverted(false);
     leftAlgaeMotor.configure(leftAlgaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
-    rightAlgaeMotor = new SparkMax(17, MotorType.kBrushless);
+    rightAlgaeMotor = new SparkMax(IntakeConstants.ID_RIGHT_ALGAE_MOTOR, MotorType.kBrushless);
     rightAlgaeConfig = new SparkMaxConfig();
 
     rightAlgaeConfig
     .smartCurrentLimit(40,60)
     .idleMode(IdleMode.kBrake)
     .inverted(true)
-    .follow(16);
+    .follow(IntakeConstants.ID_LEFT_ALGAE_MOTOR);
     rightAlgaeMotor.configure(rightAlgaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }

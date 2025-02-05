@@ -92,10 +92,35 @@ public class RobotContainer
 
 
     // Configure the trigger bindings
+
     configureBindings();
     configureSwerve();
+    configureNamedCommand();
     DriverStation.silenceJoystickConnectionWarning(true);
+
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+  }
+
+  private void configureNamedCommand() 
+  {
+    NamedCommands.registerCommand("Wrist Point Position",
+    getAutonomousCommand());
+    
+    NamedCommands.registerCommand("Shooter Coral",
+    getAutonomousCommand());
+  
+    NamedCommands.registerCommand("Collect Algae",
+    getAutonomousCommand());
+  
+    NamedCommands.registerCommand("Collect Coral",
+    getAutonomousCommand());
+  
+    NamedCommands.registerCommand("Go to L3",
+    getAutonomousCommand());
+  
+    NamedCommands.registerCommand("Go to L4",
+    getAutonomousCommand());
+  
   }
 
 
@@ -122,10 +147,11 @@ public class RobotContainer
   }
 
   private void operatorControllerBindings() {
+    
     elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
     intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.01), intakeAlgae));
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0), intakeCoral));
-
+    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0));
     
     operatorHID.button(ButtonConstants.COLLECT_ALGAE).whileTrue(
       new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.5), intakeAlgae)
@@ -149,14 +175,13 @@ public class RobotContainer
         new GoToAngleWrist(wrist, 20)
       ));
     
-    operatorHID.button(ButtonConstants.GO_TO_L2).whileTrue(getAutonomousCommand());
+    operatorHID.button(ButtonConstants.GO_TO_L2).whileTrue(new GoToAngleWrist(wrist, 10));
     operatorHID.button(ButtonConstants.GO_TO_L3).whileTrue(getAutonomousCommand());
     operatorHID.button(ButtonConstants.GO_TO_L4).whileTrue(getAutonomousCommand());
 
     operatorHID.button(ButtonConstants.END_GAME).whileTrue(getAutonomousCommand());    
 
   }
-
 
   public Command getAutonomousCommand()
   {
@@ -175,31 +200,6 @@ public class RobotContainer
   }
 
   private void configureSwerve() {
-    AbsoluteDrive absoluteDrive = new AbsoluteDrive(drivebase,
-                                  () -> MathUtil.applyDeadband(driverXbox.getLeftY()*0.75,
-                                                              OperatorConstants.LEFT_Y_DEADBAND),
-                                  () -> -MathUtil.applyDeadband(driverXbox.getLeftX()*0.75,
-                                                              OperatorConstants.LEFT_X_DEADBAND),
-                                  () -> -MathUtil.applyDeadband(driverXbox.getRightX(),
-                                                              OperatorConstants.RIGHT_X_DEADBAND),
-                                  () -> -MathUtil.applyDeadband(driverXbox.getRightX(),
-                                                              OperatorConstants.RIGHT_X_DEADBAND));
-
-                                                              
-    Command baseDriveCommand = drivebase.driveCommand(        
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getRightX()*-1,.1));
-
-        Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
-      () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-      () -> driverXbox.getRightX(),
-      () -> driverXbox.getRightY());
-
-        // drivebase.setDefaultCommand(baseDriveCommand);
-
-
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
       SwerveInputStream.of(drivebase.getSwerveDrive(),
     () -> driverXbox.getLeftY() * -1,
@@ -212,7 +212,6 @@ public class RobotContainer
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     
   }
-
 
   public static CommandXboxController getDriverXbox() {
     return driverXbox;
