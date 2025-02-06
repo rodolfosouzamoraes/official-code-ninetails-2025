@@ -48,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftMotorConfig
     .smartCurrentLimit(40, 60)
     .idleMode(IdleMode.kBrake)
-    .inverted(false);
+    .inverted(true);
     
     leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -57,16 +57,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     rightMotorConfig
     .smartCurrentLimit(40, 60)
     .idleMode(IdleMode.kBrake)
-    .inverted(true)
-    .follow(ElevatorConstants.ID_LEFT_MOTOR);
+    .inverted(false)
+    .follow(ElevatorConstants.ID_LEFT_MOTOR, true);
     rightMotor.configure(rightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
-    encoder = new Encoder(ElevatorConstants.CHANNEL_A, ElevatorConstants.CHANNEL_B, true, EncodingType.k4X);
-    encoder.setDistancePerPulse(0.008);
+    encoder = new Encoder(ElevatorConstants.CHANNEL_A, ElevatorConstants.CHANNEL_B, false, EncodingType.k4X);
+    encoder.reset();
 
     constraints = new TrapezoidProfile.Constraints(0.37, 0.188468);
-    pidController = new ProfiledPIDController(0.005, 0, 0, constraints, 0);
+    pidController = new ProfiledPIDController(0.005, 0, 0, constraints);
     feedforward = new ElevatorFeedforward(0, 0.22, 32.04, 0.02);
   }
 
@@ -87,8 +87,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     );
   }
 
+  public void controlElevatorJoystick(double output) {
+    leftMotor.set(output*0.5);
+  }
+
   public double getEncoderDistance() {
-    return encoder.getDistance();
+    return encoder.getDistance()/45;
   }
 
   public void resetEncoder() {

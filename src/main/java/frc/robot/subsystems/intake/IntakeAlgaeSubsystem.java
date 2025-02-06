@@ -34,8 +34,8 @@ public class IntakeAlgaeSubsystem extends SubsystemBase {
     rightAlgaeConfig
     .smartCurrentLimit(40,60)
     .idleMode(IdleMode.kBrake)
-    .inverted(true)
-    .follow(IntakeConstants.ID_LEFT_ALGAE_MOTOR);
+    .inverted(false)
+    .follow(IntakeConstants.ID_LEFT_ALGAE_MOTOR, true);
     rightAlgaeMotor.configure(rightAlgaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
@@ -47,6 +47,7 @@ public class IntakeAlgaeSubsystem extends SubsystemBase {
 
   public void setAlgaeSpeed(double cSpeed) {
     leftAlgaeMotor.set(cSpeed);
+    rightAlgaeMotor.set(cSpeed);
   }
 
 }

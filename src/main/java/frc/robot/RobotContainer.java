@@ -51,6 +51,8 @@ public class RobotContainer
 
   final static CommandGenericHID operatorHID = new CommandGenericHID(1);
   final static GenericHID operatorController = new GenericHID(1);
+  final static CommandXboxController operatorControllerXbox = new CommandXboxController(1);
+
   
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -147,9 +149,16 @@ public class RobotContainer
   }
 
   private void operatorControllerBindings() {
+
+    elevator.setDefaultCommand(
+      new RunCommand(
+        () -> elevator.controlElevatorJoystick(operatorControllerXbox.getLeftY()), elevator
+      ));
+
+
     
-    elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
-    intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.01), intakeAlgae));
+    // elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
+    intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0), intakeAlgae));
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0), intakeCoral));
     wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0));
     
@@ -174,6 +183,9 @@ public class RobotContainer
         new GoToHeight(elevator, ElevatorConstants.L1_HEIGHT),
         new GoToAngleWrist(wrist, 20)
       ));
+
+    operatorControllerXbox.y().whileTrue(new GoToAngleWrist(wrist, 1));
+
     
     operatorHID.button(ButtonConstants.GO_TO_L2).whileTrue(new GoToAngleWrist(wrist, 10));
     operatorHID.button(ButtonConstants.GO_TO_L3).whileTrue(getAutonomousCommand());

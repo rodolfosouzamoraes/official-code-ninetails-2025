@@ -36,10 +36,11 @@ public class WristSubsystem extends SubsystemBase {
       .maxAcceleration(2500);
 
     wristConfig.closedLoop
-      .pidf(0.00018, 0, 0.00002, 0.00019999999494757503)
-      .outputRange(0, 0);
+      .pidf(2, 0, 0.00002, 0.00019999999494757503)
+      .outputRange(-1, 1);
     closed_controller = wristMotor.getClosedLoopController();
 
+    resetEncoder();
     wristConfig.softLimit.forwardSoftLimit(1.2);  // Limite do motor para a frente
     wristConfig.softLimit.reverseSoftLimit(-3);  // Limite do motor ao contrário
 
@@ -65,7 +66,7 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    if (getEncoderDistance() < setPoint+1 && getEncoderDistance() > setPoint-1) {
+    if (getEncoderDistance() < setPoint+0.1 && getEncoderDistance() > setPoint-0.1) {
       return true;
     } 
     return false;

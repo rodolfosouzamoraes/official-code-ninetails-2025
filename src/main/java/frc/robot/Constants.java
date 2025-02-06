@@ -51,11 +51,11 @@ public final class Constants
 
   public static class ElevatorConstants
   {
-    public static final int CHANNEL_A = 0;
-    public static final int CHANNEL_B = 1;
+    public static final int CHANNEL_A = 3;
+    public static final int CHANNEL_B = 4;
     
-    public static final int ID_LEFT_MOTOR = 16;
-    public static final int ID_RIGHT_MOTOR = 18;
+    public static final int ID_LEFT_MOTOR = 14;
+    public static final int ID_RIGHT_MOTOR = 15;
     
     public static final double L1_HEIGHT = 10;
     public static final double L2_HEIGHT = 20;
@@ -78,7 +78,7 @@ public final class Constants
 
   public static class ButtonConstants
   {
-    public static final int COLLECT_ALGAE = 0;
+    public static final int COLLECT_ALGAE = 1;
     public static final int COLLECT_CORAL = 1;
 
     public static final int SHOOTER_ALGAE = 2;

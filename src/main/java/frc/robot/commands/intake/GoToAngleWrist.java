@@ -34,9 +34,6 @@ public class GoToAngleWrist extends Command {
 
   @Override
   public boolean isFinished() {
-    if (wrist.atSetpoint()) {
-      return true;
-    }
     return false;
   }
 }
