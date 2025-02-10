@@ -38,7 +38,7 @@ public class WristSubsystem extends SubsystemBase {
 
 
     wristConfig.closedLoop
-      .pidf(0.2, 0, 0, 0.00000005)
+      .pidf(0.2, 0, 0.005, 0.00000005)
       .outputRange(-1, 1);
     closed_controller = wristMotor.getClosedLoopController();
 

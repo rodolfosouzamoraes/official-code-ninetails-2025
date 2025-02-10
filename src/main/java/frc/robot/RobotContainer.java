@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -149,13 +150,24 @@ public class RobotContainer
   }
 
   private void operatorControllerBindings() {
-
     elevator.setDefaultCommand(
-      new RunCommand(
-        () -> elevator.controlElevatorJoystick(operatorControllerXbox.getLeftY()), elevator
-      ));
+      new GoToHeight(elevator, 1)
+    );
+
+    // elevator.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> elevator.controlElevatorJoystick(operatorControllerXbox.getLeftY()), elevator
+    //   )
+    // );
 
 
+    operatorControllerXbox.y().whileTrue(
+      new ParallelCommandGroup(
+        new GoToHeight(elevator, 90),
+        new GoToAngleWrist(wrist, 2)
+      )
+    );
+    operatorControllerXbox.povRight().whileTrue(new GoToHeight(elevator, 20));
     
     // elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
     intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(getOperatorXbox().getLeftTriggerAxis() * -0.5), intakeAlgae));

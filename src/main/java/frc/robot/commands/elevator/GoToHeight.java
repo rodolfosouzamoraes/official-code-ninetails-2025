@@ -34,9 +34,6 @@ public class GoToHeight extends Command {
 
   @Override
   public boolean isFinished() {
-    if (elevator.atSetpoint()) {
-      return true;
-    }
     return false;
   }
 }

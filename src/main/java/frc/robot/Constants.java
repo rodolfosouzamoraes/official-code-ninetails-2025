@@ -51,8 +51,8 @@ public final class Constants
 
   public static class ElevatorConstants
   {
-    public static final int CHANNEL_A = 4;
-    public static final int CHANNEL_B = 5;
+    public static final int CHANNEL_A = 4;  // Fio Azul
+    public static final int CHANNEL_B = 5;  // Fio Amarelo
     
     public static final int ID_LEFT_MOTOR = 14;
     public static final int ID_RIGHT_MOTOR = 15;
@@ -62,6 +62,9 @@ public final class Constants
     public static final double L3_HEIGHT = 0;
     public static final double L4_HEIGHT = 0;
 
+
+    public static final double MAX_ENCODER = 5120;
+    
   }
 
   public static class IntakeConstants

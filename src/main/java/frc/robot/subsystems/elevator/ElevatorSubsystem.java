@@ -34,6 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private final TrapezoidProfile.Constraints constraints;
   private final ProfiledPIDController pidController;
+  // private final PIDController pidController;
   private final ElevatorFeedforward feedforward;
 
 
@@ -62,10 +63,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     encoder = new Encoder(ElevatorConstants.CHANNEL_A, ElevatorConstants.CHANNEL_B, false, EncodingType.k4X);
     encoder.reset();
-    // Ele tá invertido, e o máximo que eu vi foi 100 - Arthur sábado
-    constraints = new TrapezoidProfile.Constraints(0.37, 0.188468);
-    pidController = new ProfiledPIDController(0.005, 0, 0, constraints);
-    feedforward = new ElevatorFeedforward(0, 0.0, 0, 0);
+    encoder.setDistancePerPulse(108.0/5120.0);
+
+    constraints = new TrapezoidProfile.Constraints(0.37, 0.05);
+    pidController = new ProfiledPIDController(0.2, 0.1, 0.02, constraints);
+    pidController.setTolerance(1);
+    pidController.setIZone(4);
+    
+    // pidController = new PIDController(0.2, 0.0, 0.0);
+    // pidController.setTolerance(1);
+    // pidController.reset();
+
+
+    feedforward = new ElevatorFeedforward(0, 0.8, 1.4, 0.005);
 
     leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rightMotor.configure(rightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -74,20 +84,25 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Encoder Elevador", getEncoderDistance());
+    SmartDashboard.putNumber("Elevator/Encoder Elevador Distance", getEncoderDistance());
+    SmartDashboard.putNumber("Elevator/Encoder Elevador Rate", getEncoderRate());
+    // SmartDashboard.putNumber("Elevator/Elevator SetPoint", pidController.getSetpoint().position);
+    SmartDashboard.putNumber("Elevator/Elevator SetPoint", pidController.getSetpoint().position);
   
   }
 
 
   public void setSetpoint(double goal) {
-    pidController.setGoal(goal);
+    pidController.reset(goal);
+    // pidController.setGoal(20);
+    // pidController.setSetpoint(goal);
   }
 
   public void controlElevator() {
-    leftMotor.setVoltage(
-      pidController.calculate(getEncoderDistance())
-      + feedforward.calculate(pidController.getSetpoint().velocity)
-    );
+    double outputPID = pidController.calculate(getEncoderDistance());
+    double outputFeedForward = feedforward.calculate(pidController.getSetpoint().velocity);
+    double output = outputPID + outputFeedForward;
+    leftMotor.setVoltage(-output);
   }
 
   public void controlElevatorJoystick(double output) {
@@ -95,7 +110,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public double getEncoderDistance() {
-    return encoder.getDistance()/45;
+    return encoder.getDistance();
+  }
+
+  public double getEncoderRate() {
+    return encoder.getRate();
   }
 
   public void resetEncoder() {
