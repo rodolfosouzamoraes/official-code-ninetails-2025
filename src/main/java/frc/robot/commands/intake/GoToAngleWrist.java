@@ -22,11 +22,11 @@ public class GoToAngleWrist extends Command {
 
   @Override
   public void initialize() {
-    wrist.controlWrist(setPoint);
   }
 
   @Override
   public void execute() {
+    wrist.controlWrist(setPoint);
   }
 
   @Override

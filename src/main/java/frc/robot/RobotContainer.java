@@ -158,11 +158,19 @@ public class RobotContainer
 
     
     // elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
-    intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0), intakeAlgae));
-    intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0), intakeCoral));
-    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0));
-    
-    operatorHID.button(ButtonConstants.COLLECT_ALGAE).whileTrue(
+    intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(getOperatorXbox().getLeftTriggerAxis() * -0.5), intakeAlgae));
+    intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
+    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.4));
+
+    // wrist.setDefaultCommand(new RunCommand(() -> wrist.controleWrist(getOperatorXbox().getRightY()*0.5), wrist));
+
+
+    operatorControllerXbox.leftBumper().whileTrue(new GoToAngleWrist(wrist, 3.2));
+    operatorControllerXbox.rightBumper().whileTrue(new GoToAngleWrist(wrist, 2));
+    operatorControllerXbox.a().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
+    operatorControllerXbox.x().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.3), intakeCoral));
+    operatorControllerXbox.b().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(0.3), intakeCoral));
+   /*  operatorHID.button(ButtonConstants.COLLECT_ALGAE).whileTrue(
       new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.5), intakeAlgae)
     );    
 
@@ -184,14 +192,13 @@ public class RobotContainer
         new GoToAngleWrist(wrist, 20)
       ));
 
-    operatorControllerXbox.y().whileTrue(new GoToAngleWrist(wrist, 1));
 
     
     operatorHID.button(ButtonConstants.GO_TO_L2).whileTrue(new GoToAngleWrist(wrist, 10));
     operatorHID.button(ButtonConstants.GO_TO_L3).whileTrue(getAutonomousCommand());
     operatorHID.button(ButtonConstants.GO_TO_L4).whileTrue(getAutonomousCommand());
 
-    operatorHID.button(ButtonConstants.END_GAME).whileTrue(getAutonomousCommand());    
+    operatorHID.button(ButtonConstants.END_GAME).whileTrue(getAutonomousCommand());   */  
 
   }
 
@@ -214,8 +221,8 @@ public class RobotContainer
   private void configureSwerve() {
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
       SwerveInputStream.of(drivebase.getSwerveDrive(),
-    () -> driverXbox.getLeftY() * -1,
-    () -> driverXbox.getLeftX() * -1)
+    () -> driverXbox.getLeftY() * 1,
+    () -> driverXbox.getLeftX() * 1)
           .withControllerRotationAxis(driverXbox::getRightX)
       .deadband(OperatorConstants.DEADBAND)
       .scaleTranslation(0.8)
@@ -227,5 +234,9 @@ public class RobotContainer
 
   public static CommandXboxController getDriverXbox() {
     return driverXbox;
+  }
+
+  public static CommandXboxController getOperatorXbox() {
+    return operatorControllerXbox;
   }
 }

@@ -50,7 +50,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     .idleMode(IdleMode.kBrake)
     .inverted(true);
     
-    leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     rightMotorConfig = new SparkMaxConfig();
 
@@ -59,20 +58,24 @@ public class ElevatorSubsystem extends SubsystemBase {
     .idleMode(IdleMode.kBrake)
     .inverted(false)
     .follow(ElevatorConstants.ID_LEFT_MOTOR, true);
-    rightMotor.configure(rightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
     encoder = new Encoder(ElevatorConstants.CHANNEL_A, ElevatorConstants.CHANNEL_B, false, EncodingType.k4X);
     encoder.reset();
-
+    // Ele tá invertido, e o máximo que eu vi foi 100 - Arthur sábado
     constraints = new TrapezoidProfile.Constraints(0.37, 0.188468);
     pidController = new ProfiledPIDController(0.005, 0, 0, constraints);
-    feedforward = new ElevatorFeedforward(0, 0.22, 32.04, 0.02);
+    feedforward = new ElevatorFeedforward(0, 0.0, 0, 0);
+
+    leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rightMotor.configure(rightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Encoder Elevador", getEncoderDistance());
+  
   }
 
 

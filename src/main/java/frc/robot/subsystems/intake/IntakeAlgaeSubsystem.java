@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -34,8 +35,7 @@ public class IntakeAlgaeSubsystem extends SubsystemBase {
     rightAlgaeConfig
     .smartCurrentLimit(40,60)
     .idleMode(IdleMode.kBrake)
-    .inverted(false)
-    .follow(IntakeConstants.ID_LEFT_ALGAE_MOTOR, true);
+    .inverted(true);
     rightAlgaeMotor.configure(rightAlgaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
@@ -43,6 +43,9 @@ public class IntakeAlgaeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Left Velocity Algae", leftAlgaeMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Right Velocity Algae", rightAlgaeMotor.getEncoder().getVelocity());
+
   }
 
   public void setAlgaeSpeed(double cSpeed) {

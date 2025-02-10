@@ -8,17 +8,18 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class WristSubsystem extends SubsystemBase {
-  
   private SparkMax wristMotor;
   private SparkMaxConfig wristConfig;
+
   private SparkClosedLoopController closed_controller;
-  private double setPoint;
+  private double setpoint;
   
   public WristSubsystem() {
     
@@ -29,20 +30,27 @@ public class WristSubsystem extends SubsystemBase {
     .smartCurrentLimit(40, 60)
     .idleMode(IdleMode.kBrake)
     .inverted(false);
-    wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    wristConfig.closedLoop.maxMotion
+    wristConfig.closedLoop.maxMotion      
       .maxVelocity(5000)
-      .maxAcceleration(2500);
+      .maxAcceleration(1250)
+      .allowedClosedLoopError(0.1);
+
 
     wristConfig.closedLoop
-      .pidf(2, 0, 0.00002, 0.00019999999494757503)
+      .pidf(0.2, 0, 0, 0.00000005)
       .outputRange(-1, 1);
     closed_controller = wristMotor.getClosedLoopController();
 
-    resetEncoder();
-    wristConfig.softLimit.forwardSoftLimit(1.2);  // Limite do motor para a frente
-    wristConfig.softLimit.reverseSoftLimit(-3);  // Limite do motor ao contrário
+    wristConfig.softLimit
+      .forwardSoftLimit(4)
+      .reverseSoftLimit(0);
+      resetEncoder();
+
+    wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    
+
 
     // wristConfig.encoder.positionConversionFactor(1/16);
   }
@@ -51,10 +59,18 @@ public class WristSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Encoder Wrist", getEncoderDistance());
+    SmartDashboard.putNumber("SetPoint Wrist", setpoint);
+    
+    
   }
 
   public void controlWrist(double setpoint) {
+    this.setpoint = setpoint;
     closed_controller.setReference(setpoint, ControlType.kMAXMotionPositionControl);
+  }
+
+  public void controleWrist(double speed) {
+    wristMotor.set(speed);
   }
 
   public double getEncoderDistance() {
@@ -66,7 +82,7 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public boolean atSetpoint() {
-    if (getEncoderDistance() < setPoint+0.1 && getEncoderDistance() > setPoint-0.1) {
+    if (getEncoderDistance() < setpoint+0.1 && getEncoderDistance() > setpoint-0.1) {
       return true;
     } 
     return false;
