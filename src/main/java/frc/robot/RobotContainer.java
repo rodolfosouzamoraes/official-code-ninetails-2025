@@ -57,7 +57,7 @@ public class RobotContainer
 
   
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
 
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
@@ -65,44 +65,39 @@ public class RobotContainer
   private final IntakeCoralSubsystem intakeCoral = new IntakeCoralSubsystem();
   private final WristSubsystem wrist = new WristSubsystem();
 
-
-  private final Field2d field;
+  private final Field2d field = new Field2d();
 
   public RobotContainer()
   {
-    
-    field = new Field2d();
-        SmartDashboard.putData("Field", field);
-
-        // Logging callback for current robot pose
-        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.setRobotPose(pose);
-        });
-
-        // Logging callback for target robot pose
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.getObject("target pose").setPose(pose);
-        });
-
-        // Logging callback for the active path, this is sent as a list of poses
-        PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            // Do whatever you want with the poses here
-            field.getObject("path").setPoses(poses);
-        });
-
-
-
-
     // Configure the trigger bindings
-
+    configureLog();
     configureBindings();
     configureSwerve();
     configureNamedCommand();
     DriverStation.silenceJoystickConnectionWarning(true);
 
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+  }
+
+  private void configureLog() {
+      // Logging callback for current robot pose
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      // Do whatever you want with the pose here
+      field.setRobotPose(pose);
+    });
+
+    // Logging callback for target robot pose
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+        // Do whatever you want with the pose here
+      field.getObject("target pose").setPose(pose);
+    });
+
+    // Logging callback for the active path, this is sent as a list of poses
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+        // Do whatever you want with the poses here
+      field.getObject("path").setPoses(poses);
+    });
+
   }
 
   private void configureNamedCommand() 
@@ -231,12 +226,6 @@ public class RobotContainer
 
   }
 
-  public Command getAutonomousCommand()
-  {
-    // An example command will be run in autonomous
-    
-    return drivebase.getAutonomousCommand("Auto 1");
-  }
 
   public void setDriveMode()
   {
@@ -268,5 +257,13 @@ public class RobotContainer
 
   public static CommandXboxController getOperatorXbox() {
     return operatorControllerXbox;
+  }
+
+  
+  public Command getAutonomousCommand()
+  {
+    // An example command will be run in autonomous
+    
+    return drivebase.getAutonomousCommand("Auto 1");
   }
 }

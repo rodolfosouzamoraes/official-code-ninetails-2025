@@ -43,8 +43,8 @@ public class IntakeAlgaeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Left Velocity Algae", leftAlgaeMotor.getEncoder().getVelocity());
-    SmartDashboard.putNumber("Right Velocity Algae", rightAlgaeMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Intake Algae/Left Velocity Algae", leftAlgaeMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Intake Algae/Right Velocity Algae", rightAlgaeMotor.getEncoder().getVelocity());
 
   }
 
