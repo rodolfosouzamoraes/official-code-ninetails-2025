@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -67,13 +68,17 @@ public class RobotContainer
 
   private final Field2d field = new Field2d();
 
+  private final SendableChooser<String> pathChooser = new SendableChooser<>();
+
   public RobotContainer()
   {
     // Configure the trigger bindings
+    
     configureLog();
     configureBindings();
     configureSwerve();
     configureNamedCommand();
+    configurePathChooser();
     DriverStation.silenceJoystickConnectionWarning(true);
 
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
@@ -99,6 +104,8 @@ public class RobotContainer
     });
 
   }
+
+
 
   private void configureNamedCommand() 
   {
@@ -130,6 +137,7 @@ public class RobotContainer
   }
 
 
+
   private void driverControllerBindings() {
 
     driverXbox.rightBumper().whileTrue(drivebase.autoAlign(
@@ -145,6 +153,8 @@ public class RobotContainer
     ));
   }
 
+
+
   private void operatorControllerBindings() {
     elevator.setDefaultCommand(
       new GoToHeight(elevator, 1)
@@ -159,7 +169,7 @@ public class RobotContainer
 
     operatorControllerXbox.y().whileTrue(
       new ParallelCommandGroup(
-        // new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
+        new GoToHeight(elevator, 110),
         new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L1)
       )
     );
@@ -186,7 +196,7 @@ public class RobotContainer
     // elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
     intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(getOperatorXbox().getLeftTriggerAxis() * -0.5), intakeAlgae));
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
-    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.4));
+    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0));
 
     // wrist.setDefaultCommand(new RunCommand(() -> wrist.controleWrist(getOperatorXbox().getRightY()*0.5), wrist));
 
@@ -232,10 +242,12 @@ public class RobotContainer
     configureBindings();
   }
 
+
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);
   }
+
 
   private void configureSwerve() {
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
@@ -260,10 +272,17 @@ public class RobotContainer
   }
 
   
+  public void configurePathChooser() {
+    SmartDashboard.putData(pathChooser);
+    pathChooser.setDefaultOption("Nenhum", null);
+    pathChooser.addOption("Middle", "Middle");
+
+  }
+
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
     
-    return drivebase.getAutonomousCommand("Auto 1");
+    return drivebase.getAutonomousCommand(pathChooser.getSelected());
   }
 }

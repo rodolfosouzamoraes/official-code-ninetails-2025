@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.37050359712230346,
+      "waypointRelativePos": 0.37439613526570004,
       "rotationDegrees": 0.0
     }
   ],
@@ -39,9 +39,9 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.93,
-    "maxAcceleration": 15.0,
+    "maxAcceleration": 12.0,
     "maxAngularVelocity": 200.0,
-    "maxAngularAcceleration": 600.0,
+    "maxAngularAcceleration": 500.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -50,7 +50,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "Auto 1",
+  "folder": "Middle ",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -125.00000000000001
