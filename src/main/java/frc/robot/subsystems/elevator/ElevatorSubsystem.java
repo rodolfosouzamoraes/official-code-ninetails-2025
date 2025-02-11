@@ -74,7 +74,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // pidController.setTolerance(1);
     // pidController.reset();
 
-
+    // Pegue a vs do pid - 0.23, 0.05, 0.024
     feedforward = new ElevatorFeedforward(0, 0.8, 1.4, 0.005);
 
     leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

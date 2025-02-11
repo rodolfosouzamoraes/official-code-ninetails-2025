@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.elevator.GoToHeight;
 import frc.robot.commands.intake.GoToAngleWrist;
@@ -163,10 +164,28 @@ public class RobotContainer
 
     operatorControllerXbox.y().whileTrue(
       new ParallelCommandGroup(
-        new GoToHeight(elevator, 90),
-        new GoToAngleWrist(wrist, 2)
+        // new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
+        new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L1)
       )
     );
+    
+    // operatorControllerXbox.leftBumper().whileTrue(
+    //   new ParallelCommandGroup(
+    //     new GoToHeight(elevator, 50),
+    //     new GoToAngleWrist(wrist, 2.5)
+    //   )
+    // );
+
+    // operatorControllerXbox.rightBumper().whileTrue(
+    //   new ParallelCommandGroup(
+    //     new GoToHeight(elevator, 15),
+    //     new GoToAngleWrist(wrist, 2.5)
+    //   )
+    // );
+
+    // operatorControllerXbox.leftBumper().whileTrue(new ParallelCommandGroup(new ));
+
+
     operatorControllerXbox.povRight().whileTrue(new GoToHeight(elevator, 20));
     
     // elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
@@ -177,8 +196,6 @@ public class RobotContainer
     // wrist.setDefaultCommand(new RunCommand(() -> wrist.controleWrist(getOperatorXbox().getRightY()*0.5), wrist));
 
 
-    operatorControllerXbox.leftBumper().whileTrue(new GoToAngleWrist(wrist, 3.2));
-    operatorControllerXbox.rightBumper().whileTrue(new GoToAngleWrist(wrist, 2));
     operatorControllerXbox.a().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
     operatorControllerXbox.x().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.3), intakeCoral));
     operatorControllerXbox.b().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(0.3), intakeCoral));
@@ -217,7 +234,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    
+    return drivebase.getAutonomousCommand("Auto 1");
   }
 
   public void setDriveMode()
@@ -233,9 +251,9 @@ public class RobotContainer
   private void configureSwerve() {
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
       SwerveInputStream.of(drivebase.getSwerveDrive(),
-    () -> driverXbox.getLeftY() * 1,
-    () -> driverXbox.getLeftX() * 1)
-          .withControllerRotationAxis(driverXbox::getRightX)
+    () -> driverXbox.getLeftY() * -1,
+    () -> driverXbox.getLeftX() * -1)
+          .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
       .deadband(OperatorConstants.DEADBAND)
       .scaleTranslation(0.8)
       .allianceRelativeControl(true));

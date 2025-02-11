@@ -57,11 +57,10 @@ public final class Constants
     public static final int ID_LEFT_MOTOR = 14;
     public static final int ID_RIGHT_MOTOR = 15;
     
-    public static final double L1_HEIGHT = 10;
-    public static final double L2_HEIGHT = 20;
-    public static final double L3_HEIGHT = 0;
-    public static final double L4_HEIGHT = 0;
-
+    public static final double L1_HEIGHT = 0;
+    public static final double L2_HEIGHT = 15;
+    public static final double L3_HEIGHT = 53;
+    public static final double L4_HEIGHT = 88;
 
     public static final double MAX_ENCODER = 5120;
     
@@ -76,6 +75,10 @@ public final class Constants
     public static final int ID_CORAL_MOTOR = 18;
 
     public static final int ID_WRIST_MOTOR = 19;
+
+    public static final double POSITION_ANGLE_WRIST = 2.4;
+    public static final double POSITION_ANGLE_WRIST_L1 = 3.0;
+
     
   }
 

@@ -34,18 +34,21 @@ public class WristSubsystem extends SubsystemBase {
     wristConfig.closedLoop.maxMotion      
       .maxVelocity(5000)
       .maxAcceleration(1250)
-      .allowedClosedLoopError(0.1);
+      .allowedClosedLoopError(0.05);
 
 
     wristConfig.closedLoop
-      .pidf(0.2, 0, 0.005, 0.00000005)
+      .pidf(0.3, 0.002, 0.12, 0.000000001)
+      .iZone(0.15)
       .outputRange(-1, 1);
     closed_controller = wristMotor.getClosedLoopController();
 
     wristConfig.softLimit
+      .reverseSoftLimitEnabled(true)
+      .forwardSoftLimitEnabled(true)
       .forwardSoftLimit(4)
       .reverseSoftLimit(0);
-      resetEncoder();
+    resetEncoder();
 
     wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 

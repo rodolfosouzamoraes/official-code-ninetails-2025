@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 5.812940140846271,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2698063380281677,
-        "y": 6.065845070422535
+        "x": 7.230193661971831,
+        "y": 3.1746478873239425
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "End First Score - L4"
     },
     {
       "anchor": {
-        "x": 2.5816021126727495,
-        "y": 5.824911971837648
+        "x": 3.474471830985914,
+        "y": 1.9132922535211252
       },
       "prevControl": {
-        "x": 2.252881862351107,
-        "y": 4.907955484096919
+        "x": 4.425160944206009,
+        "y": 2.4526555793991407
       },
       "nextControl": {
-        "x": 2.8508802816863033,
-        "y": 6.576056338034506
+        "x": 2.790692016342483,
+        "y": 1.5253570706460988
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.168926056334723,
-        "y": 6.675264084513705
+        "x": 1.6264008620689654,
+        "y": 0.6965517241379302
       },
       "prevControl": {
-        "x": 2.177684859151623,
-        "y": 7.964348591555958
+        "x": 2.3066825522098133,
+        "y": 1.5469038368139858
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "End First Coral Station"
     }
   ],
   "rotationTargets": [],
@@ -49,22 +49,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxVelocity": 4.93,
+    "maxAcceleration": 15.0,
+    "maxAngularVelocity": 200.0,
+    "maxAngularAcceleration": 600.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -125.00000000000001
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Auto 1",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
