@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left - First Score - L4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left - Coral Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle Left - Second Score - L3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Final Left"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

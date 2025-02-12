@@ -194,17 +194,38 @@ public class RobotContainer
     operatorControllerXbox.povRight().whileTrue(new GoToHeight(elevator, 20));
     
     // elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
-    intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(getOperatorXbox().getLeftTriggerAxis() * -0.5), intakeAlgae));
+    intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0), intakeAlgae));
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
     wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0));
 
     // wrist.setDefaultCommand(new RunCommand(() -> wrist.controleWrist(getOperatorXbox().getRightY()*0.5), wrist));
 
+    operatorControllerXbox.rightBumper().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
+    operatorControllerXbox.rightTrigger().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.5), intakeAlgae));
 
-    operatorControllerXbox.a().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
-    operatorControllerXbox.x().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.3), intakeCoral));
-    operatorControllerXbox.b().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(0.3), intakeCoral));
-   /*  operatorHID.button(ButtonConstants.COLLECT_ALGAE).whileTrue(
+    operatorControllerXbox.leftBumper().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(0.5), intakeCoral));
+    operatorControllerXbox.leftTrigger().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.5), intakeCoral));
+
+    operatorControllerXbox.x().whileTrue(new ParallelCommandGroup(
+      new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT),
+      new GoToAngleWrist(wrist, 1)
+    ));
+
+    operatorControllerXbox.a().whileTrue(new ParallelCommandGroup(
+      new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
+      new GoToAngleWrist(wrist, 1)
+    ));
+
+    operatorControllerXbox.b().whileTrue(new ParallelCommandGroup(
+      new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT),
+      new GoToAngleWrist(wrist, 2)
+    ));
+    // operatorControllerXbox.a().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
+    // operatorControllerXbox.x().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.3), intakeCoral));
+    // operatorControllerXbox.b().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(0.3), intakeCoral));
+   
+   
+    /*  operatorHID.button(ButtonConstants.COLLECT_ALGAE).whileTrue(
       new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.5), intakeAlgae)
     );    
 

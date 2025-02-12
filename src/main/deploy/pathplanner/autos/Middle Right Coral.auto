@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "First Score - L4"
+            "pathName": "Middle Right - First Score - L4"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "First Coral Station"
+            "pathName": "Middle Right - First Coral Station"
           }
         },
         {
@@ -31,13 +31,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Second Score - L3"
+            "pathName": "Right - Second Score - L3"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Final Right"
           }
         }
       ]

@@ -3,34 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6264008620689654,
-        "y": 0.6965517241379302
+        "x": 1.6685393258426968,
+        "y": 0.7106741573033685
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2883261761639324,
-        "y": 1.4854035952396578
+        "x": 2.369674431173236,
+        "y": 1.4844557966839278
       },
       "isLocked": false,
       "linkedName": "End First Coral Station"
     },
     {
       "anchor": {
-        "x": 3.79,
-        "y": 2.82
+        "x": 3.815,
+        "y": 2.856
       },
       "prevControl": {
-        "x": 3.3752353996761357,
-        "y": 2.1016066390580685
+        "x": 3.4813744308253023,
+        "y": 2.475157479236562
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "End Second Score - L3"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4545454545454546,
+      "waypointRelativePos": 0.37439613526570076,
       "rotationDegrees": 0.0
     }
   ],
@@ -38,10 +38,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.93,
-    "maxAcceleration": 12.0,
-    "maxAngularVelocity": 200.0,
-    "maxAngularAcceleration": 500.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -50,7 +50,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "Middle ",
+  "folder": "Right",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -125.00000000000001

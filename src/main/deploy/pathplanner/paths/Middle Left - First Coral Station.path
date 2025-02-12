@@ -8,40 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.2772535211255605,
-        "y": 3.1746478873239425
+        "x": 6.536172945211101,
+        "y": 5.399850171233779
       },
       "isLocked": false,
       "linkedName": "End First Score - L4"
     },
     {
       "anchor": {
-        "x": 3.474471830985914,
-        "y": 1.9132922535211252
+        "x": 3.996832191786444,
+        "y": 6.166160102740629
       },
       "prevControl": {
-        "x": 4.425160944206009,
-        "y": 2.4526555793991407
+        "x": 4.327397260279595,
+        "y": 6.121083047946108
       },
       "nextControl": {
-        "x": 2.790692016342483,
-        "y": 1.5253570706460988
+        "x": 3.4600412540157794,
+        "y": 6.239358866982084
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.6264008620689654,
-        "y": 0.6965517241379302
+        "x": 1.713,
+        "y": 7.353
       },
       "prevControl": {
-        "x": 2.3066825522098133,
-        "y": 1.5469038368139858
+        "x": 2.103670262579998,
+        "y": 6.992386220552878
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "End First Coral Station"
+      "linkedName": "End Left Coral Station "
     }
   ],
   "rotationTargets": [],
@@ -49,19 +49,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.93,
-    "maxAcceleration": 12.0,
-    "maxAngularVelocity": 200.0,
-    "maxAngularAcceleration": 500.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.00000000000001
+    "rotation": 125.00000000000001
   },
   "reversed": false,
-  "folder": "Middle ",
+  "folder": "Middle Left",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

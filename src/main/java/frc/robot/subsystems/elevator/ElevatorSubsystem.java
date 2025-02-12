@@ -93,8 +93,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public void setSetpoint(double goal) {
-    pidController.reset(goal);
-    // pidController.setGoal(20);
+    // pidController.reset(goal);
+    pidController.setGoal(goal);
     // pidController.setSetpoint(goal);
   }
 

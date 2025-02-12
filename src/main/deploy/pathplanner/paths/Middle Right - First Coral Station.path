@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.86,
+        "y": 4.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.197252109514835,
+        "y": 2.206869293281079
+      },
+      "isLocked": false,
+      "linkedName": "End First Score - L4"
+    },
+    {
+      "anchor": {
+        "x": 4.2623595505604355,
+        "y": 1.666292134831815
+      },
+      "prevControl": {
+        "x": 4.969748110939172,
+        "y": 2.0705141693339497
+      },
+      "nextControl": {
+        "x": 3.625280898875042,
+        "y": 1.3022471910115905
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.6685393258426968,
+        "y": 0.7106741573033685
+      },
+      "prevControl": {
+        "x": 2.3814606741545385,
+        "y": 1.120224719102705
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End First Coral Station"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -125.00000000000001
+  },
+  "reversed": false,
+  "folder": "Middle Right ",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
