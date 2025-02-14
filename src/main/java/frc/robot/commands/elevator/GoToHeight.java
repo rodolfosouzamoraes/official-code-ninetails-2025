@@ -21,11 +21,11 @@ public class GoToHeight extends Command {
 
   @Override
   public void initialize() {
-    elevator.setSetpoint(setPoint);
   }
 
   @Override
   public void execute() {
+    elevator.setSetpoint(setPoint);
     elevator.controlElevator();
   }
 

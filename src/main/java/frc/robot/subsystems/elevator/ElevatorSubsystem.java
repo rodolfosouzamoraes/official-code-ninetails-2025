@@ -63,8 +63,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     encoder = new Encoder(ElevatorConstants.CHANNEL_A, ElevatorConstants.CHANNEL_B, false, EncodingType.k4X);
     encoder.reset();
-    encoder.setDistancePerPulse(108.0/5120.0);
-
+    encoder.setDistancePerPulse(118.0/5360.0);
     constraints = new TrapezoidProfile.Constraints(0.37, 0.05);
     pidController = new ProfiledPIDController(0.2, 0.1, 0.02, constraints);
     pidController.setTolerance(1);
@@ -74,7 +73,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     // pidController.setTolerance(1);
     // pidController.reset();
 
-    // Pegue a vs do pid - 0.23, 0.05, 0.024
     feedforward = new ElevatorFeedforward(0, 0.8, 1.4, 0.005);
 
     leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -93,8 +91,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public void setSetpoint(double goal) {
-    // pidController.reset(goal);
-    pidController.setGoal(goal);
+    pidController.reset(goal);  
+    // pidController.setGoal(goal);
     // pidController.setSetpoint(goal);
   }
 

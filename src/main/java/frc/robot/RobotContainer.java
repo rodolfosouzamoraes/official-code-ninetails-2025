@@ -157,22 +157,12 @@ public class RobotContainer
 
   private void operatorControllerBindings() {
     elevator.setDefaultCommand(
-      new GoToHeight(elevator, 1)
+      new GoToHeight(elevator, 0)
     );
 
-    // elevator.setDefaultCommand(
-    //   new RunCommand(
-    //     () -> elevator.controlElevatorJoystick(operatorControllerXbox.getLeftY()), elevator
-    //   )
-    // );
+    // elevator.setDefaultCommand
+    // (new RunCommand(() -> elevator.controlElevatorJoystick(operatorControllerXbox.getLeftY()), elevator));
 
-
-    operatorControllerXbox.y().whileTrue(
-      new ParallelCommandGroup(
-        new GoToHeight(elevator, 110),
-        new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L1)
-      )
-    );
     
     // operatorControllerXbox.leftBumper().whileTrue(
     //   new ParallelCommandGroup(
@@ -203,22 +193,26 @@ public class RobotContainer
     operatorControllerXbox.rightBumper().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
     operatorControllerXbox.rightTrigger().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.5), intakeAlgae));
 
-    operatorControllerXbox.leftBumper().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(0.5), intakeCoral));
-    operatorControllerXbox.leftTrigger().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.5), intakeCoral));
+    operatorControllerXbox.leftBumper().whileTrue(
+      new ParallelCommandGroup
+      (new RunCommand(() -> intakeCoral.setCoralSpeed(0.5), intakeCoral),
+      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION))
+      );
+    operatorControllerXbox.leftTrigger().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.2), intakeCoral));
 
     operatorControllerXbox.x().whileTrue(new ParallelCommandGroup(
-      new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT),
-      new GoToAngleWrist(wrist, 1)
+      new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
+      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
     ));
 
     operatorControllerXbox.a().whileTrue(new ParallelCommandGroup(
-      new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
-      new GoToAngleWrist(wrist, 1)
+      new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT),
+      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
     ));
 
     operatorControllerXbox.b().whileTrue(new ParallelCommandGroup(
       new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT),
-      new GoToAngleWrist(wrist, 2)
+      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L4)
     ));
     // operatorControllerXbox.a().whileTrue(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
     // operatorControllerXbox.x().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.3), intakeCoral));
@@ -273,10 +267,10 @@ public class RobotContainer
   private void configureSwerve() {
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
       SwerveInputStream.of(drivebase.getSwerveDrive(),
-    () -> driverXbox.getLeftY() * -1,
-    () -> driverXbox.getLeftX() * -1)
-          .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
-      .deadband(OperatorConstants.DEADBAND)
+    () -> driverXbox.getLeftY() * -3,
+    () -> driverXbox.getLeftX() * -3)
+          .withControllerRotationAxis(() -> driverXbox.getRightX() * -2)
+      .deadband(0.2)
       .scaleTranslation(0.8)
       .allianceRelativeControl(true));
 
@@ -296,7 +290,7 @@ public class RobotContainer
   public void configurePathChooser() {
     SmartDashboard.putData(pathChooser);
     pathChooser.setDefaultOption("Nenhum", null);
-    pathChooser.addOption("Middle", "Middle");
+    pathChooser.addOption("Middle Right Coral", "Middle Right Coral");
 
   }
 
