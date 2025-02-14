@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -22,11 +23,11 @@ public class IntakeCoralSubsystem extends SubsystemBase {
     coralConfig = new SparkMaxConfig();
 
     coralConfig
-      .smartCurrentLimit(40, 60)
+      .smartCurrentLimit(20, 40)
       .idleMode(IdleMode.kBrake)
       .inverted(false);
-    coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+    
+      coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
@@ -37,5 +38,5 @@ public class IntakeCoralSubsystem extends SubsystemBase {
 
   public void setCoralSpeed(double cSpeed) {
     coralMotor.set(cSpeed);
-  }
+  }  
 }

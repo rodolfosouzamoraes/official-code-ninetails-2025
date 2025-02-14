@@ -140,17 +140,22 @@ public class RobotContainer
 
   private void driverControllerBindings() {
 
+    driverXbox.a().whileTrue(drivebase.autoAlignApriltag(
+      () -> driverXbox.getLeftY() * -1,
+      () -> driverXbox.getLeftX() * -1
+    ).finallyDo(() -> drivebase.resetPIDAutoAlign()));
+
     driverXbox.rightBumper().whileTrue(drivebase.autoAlign(
       () -> driverXbox.getLeftY() * -1,
-      () -> driverXbox.getLeftX(),
+      () -> driverXbox.getLeftX() * -1,
       -125
-    ));
+    ).finallyDo(() -> drivebase.resetPIDAutoAlign()));
 
     driverXbox.leftBumper().whileTrue(drivebase.autoAlign(
       () -> driverXbox.getLeftY() * -1,
-      () -> driverXbox.getLeftX(),
+      () -> driverXbox.getLeftX() * -1,
       125
-    ));
+    ).finallyDo(() -> drivebase.resetPIDAutoAlign()));
   }
 
 
@@ -181,12 +186,11 @@ public class RobotContainer
     // operatorControllerXbox.leftBumper().whileTrue(new ParallelCommandGroup(new ));
 
 
-    operatorControllerXbox.povRight().whileTrue(new GoToHeight(elevator, 20));
     
     // elevator.setDefaultCommand(new GoToHeight(elevator, 0.0));
     intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0), intakeAlgae));
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
-    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0));
+    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.3));
 
     // wrist.setDefaultCommand(new RunCommand(() -> wrist.controleWrist(getOperatorXbox().getRightY()*0.5), wrist));
 
@@ -198,12 +202,15 @@ public class RobotContainer
       (new RunCommand(() -> intakeCoral.setCoralSpeed(0.5), intakeCoral),
       new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION))
       );
-    operatorControllerXbox.leftTrigger().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.2), intakeCoral));
+    operatorControllerXbox.leftTrigger().whileTrue(new RunCommand(() -> intakeCoral.setCoralSpeed(-0.3), intakeCoral));
 
     operatorControllerXbox.x().whileTrue(new ParallelCommandGroup(
       new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
       new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
     ));
+
+    operatorControllerXbox.y().whileTrue(new GoToAngleWrist(wrist, 3.2));
+    operatorControllerXbox.povRight().whileTrue(new GoToHeight(elevator, 100 ));
 
     operatorControllerXbox.a().whileTrue(new ParallelCommandGroup(
       new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT),
@@ -240,8 +247,6 @@ public class RobotContainer
         new GoToHeight(elevator, ElevatorConstants.L1_HEIGHT),
         new GoToAngleWrist(wrist, 20)
       ));
-
-
     
     operatorHID.button(ButtonConstants.GO_TO_L2).whileTrue(new GoToAngleWrist(wrist, 10));
     operatorHID.button(ButtonConstants.GO_TO_L3).whileTrue(getAutonomousCommand());
@@ -274,7 +279,18 @@ public class RobotContainer
       .scaleTranslation(0.8)
       .allianceRelativeControl(true));
 
+    Command driveFieldOrientedAnglularSlowVelocity = drivebase.driveFieldOriented(
+        SwerveInputStream.of(drivebase.getSwerveDrive(),
+      () -> driverXbox.getLeftY() * -1,
+      () -> driverXbox.getLeftX() * -1)
+            .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
+        .deadband(0.2)
+        .scaleTranslation(0.8)
+        .allianceRelativeControl(true));
+
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    
+    driverXbox.leftTrigger(0.1).whileTrue(driveFieldOrientedAnglularSlowVelocity);
     
   }
 

@@ -755,21 +755,39 @@ public class SwerveSubsystem extends SubsystemBase
     return swerveDrive;
   }
 
-  PIDController controllerHeading = new PIDController(0.8, 0, 0.02);
+  PIDController controllerHeading = new PIDController(1, 0, 0.005);
   PIDController controllerYSpeed = new PIDController(6, 0, 0);
+
+  public void resetPIDAutoAlign() {
+    controllerHeading.reset();
+    controllerYSpeed.reset();
+  }
 
   public Command autoAlign(DoubleSupplier xSpeed, DoubleSupplier ySpeed, double targetHeading) {
 
+    controllerHeading.setPID(0.6, 0, 0.001);
     swerveDrive.setMaximumAllowableSpeeds(2, 4);
     
-    DoubleSupplier angularRotation =  () -> -controllerHeading.calculate(
+    DoubleSupplier angularRotation =  () -> controllerHeading.calculate(
       Units.degreesToRadians(getHeading().getDegrees()), Units.degreesToRadians(targetHeading)
       );
     
+    return this.driveCommand(xSpeed, ySpeed, angularRotation);
+    // I'm fairly sure that degreesToRadians is necessary since you are enabling continous output using radians, but if someone could clarify that, that would be nice
+  
+  }
+
+  public Command autoAlignApriltag(DoubleSupplier xSpeed, DoubleSupplier ySpeed) {
+
+    swerveDrive.setMaximumAllowableSpeeds(2, 4);
+    
+    DoubleSupplier angularRotation =  () -> controllerHeading.calculate(
+      Units.degreesToRadians(getHeading().getDegrees()), Units.degreesToRadians(LimelightHelpers.getTX("limelight"))
+      );
 
     if (!LimelightHelpers.getTV("limelight")) {
-      controllerHeading.setPID(2, 0.01, 0);
-      ySpeed = () -> -controllerYSpeed.calculate(
+      controllerHeading.setPID(3, 0.01, 0);
+      ySpeed = () -> controllerYSpeed.calculate(
         Units.degreesToRadians(LimelightHelpers.getTX("limelight")), 0.0);
     } else {
       controllerHeading.setPID(0.8, 0, 0.02);
@@ -779,7 +797,6 @@ public class SwerveSubsystem extends SubsystemBase
     // I'm fairly sure that degreesToRadians is necessary since you are enabling continous output using radians, but if someone could clarify that, that would be nice
   
   }
-
 
 
   
