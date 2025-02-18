@@ -24,7 +24,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -71,11 +73,14 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * AprilTag field layout.
    */
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+
   /**
    * Enable vision odometry updates while driving.
    */
   private final boolean             visionDriveTest     = false;
+
+  private Pose2d robotPose2d;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -123,7 +128,6 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
     setupPathPlanner();
 
-    
   }
 
   /**
@@ -152,11 +156,17 @@ public class SwerveSubsystem extends SubsystemBase
 
 
 
+    SmartDashboard.putNumber("Teste",     LimelightHelpers.getBotPose("limelight")[5]);
+
   }
+
+
+
 
   @Override
   public void simulationPeriodic()
   {
+    
   }
 
   /**
@@ -761,6 +771,7 @@ public class SwerveSubsystem extends SubsystemBase
   public void resetPIDAutoAlign() {
     controllerHeading.reset();
     controllerYSpeed.reset();
+    pidController.reset();
   }
 
   public Command autoAlign(DoubleSupplier xSpeed, DoubleSupplier ySpeed, double targetHeading) {
@@ -777,23 +788,16 @@ public class SwerveSubsystem extends SubsystemBase
   
   }
 
+
+  
+  final PIDController pidController = new PIDController(0.01, 0, 0);
+
   public Command autoAlignApriltag(DoubleSupplier xSpeed, DoubleSupplier ySpeed) {
+    DoubleSupplier heading = () -> pidController.calculate(swerveDrive.getPose().getRotation().getDegrees()
+    ,  Units.radiansToDegrees(LimelightHelpers.getTargetPose_RobotSpace("limelight")[5]));
 
-    swerveDrive.setMaximumAllowableSpeeds(2, 4);
-    
-    DoubleSupplier angularRotation =  () -> controllerHeading.calculate(
-      Units.degreesToRadians(getHeading().getDegrees()), Units.degreesToRadians(LimelightHelpers.getTX("limelight"))
-      );
 
-    if (!LimelightHelpers.getTV("limelight")) {
-      controllerHeading.setPID(3, 0.01, 0);
-      ySpeed = () -> controllerYSpeed.calculate(
-        Units.degreesToRadians(LimelightHelpers.getTX("limelight")), 0.0);
-    } else {
-      controllerHeading.setPID(0.8, 0, 0.02);
-
-    }
-    return this.driveCommand(xSpeed, ySpeed, angularRotation);
+    return this.driveCommand(xSpeed, ySpeed, heading);
     // I'm fairly sure that degreesToRadians is necessary since you are enabling continous output using radians, but if someone could clarify that, that would be nice
   
   }

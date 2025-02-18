@@ -57,10 +57,12 @@ public final class Constants
     public static final int ID_LEFT_MOTOR = 14;
     public static final int ID_RIGHT_MOTOR = 15;
     
-    public static final double L1_HEIGHT = 0;
+   
     public static final double L2_HEIGHT = 20;
     public static final double L3_HEIGHT = 57;
+    public static final double L3_BALL_HEIGHT = 100;
     public static final double L4_HEIGHT = 116.2;
+    
 
     public static final double MAX_ENCODER = 5120;
     
@@ -76,27 +78,25 @@ public final class Constants
 
     public static final int ID_WRIST_MOTOR = 19;
 
-    public static final double POSITION_ANGLE_WRIST_COLLECTION = 1.3;
+    public static final double POSITION_ANGLE_WRIST_COLLECTION = 1.45;
     public static final double POSITION_ANGLE_WRIST_L1 = 3.0;
-    public static final double POSITION_ANGLE_WRIST_L2_L3 = 3.6;
+    public static final double POSITION_ANGLE_WRIST_L2_L3 = 3.5;
     public static final double POSITION_ANGLE_WRIST_L4 = 3;
 
   }
 
   public static class ButtonConstants
   {
-    public static final int COLLECT_ALGAE = 1;
-    public static final int COLLECT_CORAL = 1;
+    public static final int COLLECT_ALGAE = 9;
+    public static final int COLLECT_CORAL = 11;
 
-    public static final int SHOOTER_ALGAE = 2;
-    public static final int SHOOTER_CORAL = 3;
+    public static final int SHOOTER_ALGAE = 8;
+    public static final int SHOOTER_CORAL = 10;
 
-    public static final int GO_TO_L1 = 4;
+    public static final int GO_TO_BALL_L3 = 4;
     public static final int GO_TO_L2 = 5;
     public static final int GO_TO_L3 = 6;
-    public static final int GO_TO_L4 = 7;
-
-    public static final int END_GAME = 8;
+    public static final int GO_TO_L4 = 3;
 
   }
 
