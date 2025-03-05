@@ -125,4 +125,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     return pidController.atSetpoint();
   }
 
+  public void stopMotors() {
+    leftMotor.setVoltage(-feedforward.calculate(pidController.getSetpoint().velocity));
+  }
+
 }

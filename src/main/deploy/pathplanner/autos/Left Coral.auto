@@ -7,7 +7,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left - First Score - L4"
+            "pathName": "Left - First Position"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Score L3"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left - First Score - L4"
+                }
+              }
+            ]
           }
         },
         {
@@ -19,13 +38,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Left - Second Score - L3"
+            "pathName": "Left - Second Position"
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Final Left"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Score L3"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left - Second Score - L4"
+                }
+              }
+            ]
           }
         }
       ]

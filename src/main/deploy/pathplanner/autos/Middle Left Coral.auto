@@ -7,13 +7,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Right - First Score - L4"
+            "pathName": "Middle Right - Position"
           }
         },
         {
-          "type": "wait",
+          "type": "deadline",
           "data": {
-            "waitTime": 2.0
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Score L3"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle Right - First Score - L4"
+                }
+              }
+            ]
           }
         },
         {
@@ -23,21 +36,28 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 2.0
+            "pathName": "Left - Second Position"
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Middle Left - Second Score - L3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Final Left"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Score L3"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left - Second Score - L4"
+                }
+              }
+            ]
           }
         }
       ]

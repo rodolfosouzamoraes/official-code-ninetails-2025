@@ -4,15 +4,23 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.UsbCameraInfo;
+import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.vision.LimelightHelpers;
+import frc.robot.util.Elastic;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -62,8 +70,14 @@ public class Robot extends TimedRobot
         PortForwarder.add(port, "limelight.local", port);
     }
 
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  }
+
+  UsbCamera camera = CameraServer.startAutomaticCapture();
+  camera.setResolution(320, 180);
+  camera.setFPS(40);
+  camera.setPixelFormat(PixelFormat.kYUYV); 
+}
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics that you want ran
@@ -111,7 +125,7 @@ public class Robot extends TimedRobot
   {
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    Elastic.selectTab("Autonomous");
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null)
     {
@@ -134,6 +148,9 @@ public class Robot extends TimedRobot
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
+    Elastic.selectTab("Teleoperated");
+
     if (m_autonomousCommand != null)
     {
       m_autonomousCommand.cancel();

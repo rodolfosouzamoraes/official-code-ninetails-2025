@@ -44,6 +44,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.vision.LimelightHelpers;
+import frc.robot.subsystems.vision.LimelightHelpers.LimelightResults;
 
 import java.io.File;
 import java.io.IOException;
@@ -80,7 +81,6 @@ public class SwerveSubsystem extends SubsystemBase
    */
   private final boolean             visionDriveTest     = false;
 
-  private Pose2d robotPose2d;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -154,13 +154,7 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.updateOdometry();
     }
 
-
-
-    SmartDashboard.putNumber("Teste",     LimelightHelpers.getBotPose("limelight")[5]);
-
   }
-
-
 
 
   @Override
@@ -206,9 +200,9 @@ public class SwerveSubsystem extends SubsystemBase
           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
               // PPHolonomicController is the built in path following controller for holonomic drive trains
-              new PIDConstants(6, 0.0, 0.0),
+              new PIDConstants(4.5, 0.0, 0.02),
               // Translation PID constants
-              new PIDConstants(5.0, 0.0, 0.0)
+              new PIDConstants(3.8, 0.0, 0.006)
               // Rotation PID constants
           ),
           config,
@@ -790,11 +784,13 @@ public class SwerveSubsystem extends SubsystemBase
 
 
   
-  final PIDController pidController = new PIDController(0.01, 0, 0);
+  final PIDController pidController = new PIDController(0.05, 0, 0);
+  LimelightHelpers.LimelightResults lastValidResults = null; 
+
 
   public Command autoAlignApriltag(DoubleSupplier xSpeed, DoubleSupplier ySpeed) {
-    DoubleSupplier heading = () -> pidController.calculate(swerveDrive.getPose().getRotation().getDegrees()
-    ,  Units.radiansToDegrees(LimelightHelpers.getTargetPose_RobotSpace("limelight")[5]));
+    DoubleSupplier heading = () -> -pidController.calculate(swerveDrive.getPose().getRotation().getRadians()
+    ,  LimelightHelpers.getTargetPose_RobotSpace("limelight")[5]);
 
 
     return this.driveCommand(xSpeed, ySpeed, heading);

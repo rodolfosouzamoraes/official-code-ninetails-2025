@@ -32,6 +32,7 @@ import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.auto.ScoreL3;
 import frc.robot.commands.elevator.GoToHeight;
 import frc.robot.commands.intake.GoToAngleWrist;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
@@ -109,23 +110,28 @@ public class RobotContainer
 
   private void configureNamedCommand() 
   {
-    NamedCommands.registerCommand("Wrist Point Position",
-    getAutonomousCommand());
+    NamedCommands.registerCommand(
+      "Score L3",
+      new ScoreL3(elevator, wrist, intakeCoral)
+    );
     
-    NamedCommands.registerCommand("Shooter Coral",
-    getAutonomousCommand());
+    // NamedCommands.registerCommand("Wrist Point Position",
+    // getAutonomousCommand());
+    
+    // NamedCommands.registerCommand("Shooter Coral",
+    // getAutonomousCommand());
   
-    NamedCommands.registerCommand("Collect Algae",
-    getAutonomousCommand());
+    // NamedCommands.registerCommand("Collect Algae",
+    // getAutonomousCommand());
   
-    NamedCommands.registerCommand("Collect Coral",
-    getAutonomousCommand());
+    // NamedCommands.registerCommand("Collect Coral",
+    // getAutonomousCommand());
   
-    NamedCommands.registerCommand("Go to L3",
-    getAutonomousCommand());
+    // NamedCommands.registerCommand("Go to L3",
+    // getAutonomousCommand());
   
-    NamedCommands.registerCommand("Go to L4",
-    getAutonomousCommand());
+    // NamedCommands.registerCommand("Go to L4",
+    // getAutonomousCommand());
   
   }
 
@@ -167,7 +173,7 @@ public class RobotContainer
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
     wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.3));
 
-    commandsXboxController();
+    // commandsXboxController();
     commandsHIDController();
   }
 
@@ -197,11 +203,7 @@ public class RobotContainer
       new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
     ));
 
-    // NÃO SEI
-    /*     operatorHID.button(ButtonConstants.).whileTrue(
-      new GoToAngleWrist(wrist, 3.2)); */
-
-    // Go To Ball L3
+      // Go To Ball L3
     operatorHID.button(ButtonConstants.GO_TO_BALL_L3).whileTrue(
       new GoToHeight(elevator, ElevatorConstants.L3_BALL_HEIGHT));
 
@@ -316,10 +318,9 @@ public class RobotContainer
   }
   
   public void configurePathChooser() {
-    SmartDashboard.putData(pathChooser);
+    SmartDashboard.putData("Autonomous Chooses", pathChooser);
     pathChooser.setDefaultOption("Nenhum", null);
     pathChooser.addOption("Middle Right Coral", "Middle Right Coral");
-
   }
 
   public Command getAutonomousCommand()
