@@ -35,6 +35,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.auto.ScoreL3;
 import frc.robot.commands.elevator.GoToHeight;
 import frc.robot.commands.intake.GoToAngleWrist;
+import frc.robot.commands.swervedrive.AutoAlignAprilTag;
+import frc.robot.commands.swervedrive.AutoAlignToAngle;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.intake.IntakeAlgaeSubsystem;
@@ -146,22 +148,25 @@ public class RobotContainer
 
   private void driverControllerBindings() {
 
-    driverXbox.a().whileTrue(drivebase.autoAlignApriltag(
+    driverXbox.a().whileTrue(new AutoAlignAprilTag(
+      drivebase, 
       () -> driverXbox.getLeftY() * -1,
       () -> driverXbox.getLeftX() * -1
-    ).finallyDo(() -> drivebase.resetPIDAutoAlign()));
+    ));
 
-    driverXbox.rightBumper().whileTrue(drivebase.autoAlign(
+    driverXbox.rightBumper().whileTrue(new AutoAlignToAngle(
+      drivebase,
       () -> driverXbox.getLeftY() * -1,
       () -> driverXbox.getLeftX() * -1,
       -125
-    ).finallyDo(() -> drivebase.resetPIDAutoAlign()));
+    ));
 
-    driverXbox.leftBumper().whileTrue(drivebase.autoAlign(
+    driverXbox.leftBumper().whileTrue(new AutoAlignToAngle(
+      drivebase,
       () -> driverXbox.getLeftY() * -1,
       () -> driverXbox.getLeftX() * -1,
       125
-    ).finallyDo(() -> drivebase.resetPIDAutoAlign()));
+    ));
   }
 
 

@@ -74,7 +74,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * AprilTag field layout.
    */
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
   /**
    * Enable vision odometry updates while driving.
@@ -757,47 +757,5 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveDrive getSwerveDrive()
   {
     return swerveDrive;
-  }
-
-  PIDController controllerHeading = new PIDController(1, 0, 0.005);
-  PIDController controllerYSpeed = new PIDController(6, 0, 0);
-
-  public void resetPIDAutoAlign() {
-    controllerHeading.reset();
-    controllerYSpeed.reset();
-    pidController.reset();
-  }
-
-  public Command autoAlign(DoubleSupplier xSpeed, DoubleSupplier ySpeed, double targetHeading) {
-
-    controllerHeading.setPID(0.6, 0, 0.001);
-    swerveDrive.setMaximumAllowableSpeeds(2, 4);
-    
-    DoubleSupplier angularRotation =  () -> controllerHeading.calculate(
-      Units.degreesToRadians(getHeading().getDegrees()), Units.degreesToRadians(targetHeading)
-      );
-    
-    return this.driveCommand(xSpeed, ySpeed, angularRotation);
-    // I'm fairly sure that degreesToRadians is necessary since you are enabling continous output using radians, but if someone could clarify that, that would be nice
-  
-  }
-
-
-  
-  final PIDController pidController = new PIDController(0.05, 0, 0);
-  LimelightHelpers.LimelightResults lastValidResults = null; 
-
-
-  public Command autoAlignApriltag(DoubleSupplier xSpeed, DoubleSupplier ySpeed) {
-    DoubleSupplier heading = () -> -pidController.calculate(swerveDrive.getPose().getRotation().getRadians()
-    ,  LimelightHelpers.getTargetPose_RobotSpace("limelight")[5]);
-
-
-    return this.driveCommand(xSpeed, ySpeed, heading);
-    // I'm fairly sure that degreesToRadians is necessary since you are enabling continous output using radians, but if someone could clarify that, that would be nice
-  
-  }
-
-
-  
+  }  
 }
