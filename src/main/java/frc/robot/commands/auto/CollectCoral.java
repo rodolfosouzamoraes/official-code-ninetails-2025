@@ -7,24 +7,20 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.commands.intake.GoToAngleWrist;
-import frc.robot.subsystems.intake.IntakeAlgaeSubsystem;
 import frc.robot.subsystems.intake.IntakeCoralSubsystem;
 import frc.robot.subsystems.intake.WristSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CollectCoral extends SequentialCommandGroup {
-  /** Creates a new CollectCoral. */
   public CollectCoral(IntakeCoralSubsystem intakeCoral, WristSubsystem wristSubsystem) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+
     addCommands(
       new RunCommand(() -> intakeCoral.setCoralSpeed(0.7), intakeCoral),
-      new GoToAngleWrist(wristSubsystem, 2.8),
+      new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION),
 
-      new WaitCommand(1)
+      new WaitCommand(1),
+      new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral)
     );
   }
 }

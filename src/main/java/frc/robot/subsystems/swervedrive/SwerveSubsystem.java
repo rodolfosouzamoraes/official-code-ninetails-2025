@@ -758,4 +758,12 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return swerveDrive;
   }  
+
+
+  public double getTagPose(int tagID) {
+    if (aprilTagFieldLayout == null) return -1;
+
+    Pose3d tagPose = aprilTagFieldLayout.getTagPose(tagID).orElse(null);
+    return (tagPose != null) ? Units.radiansToDegrees(tagPose.getRotation().getZ()) : -1;
+  }
 }

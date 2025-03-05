@@ -16,18 +16,17 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.intake.IntakeCoralSubsystem;
 import frc.robot.subsystems.intake.WristSubsystem;
 
+public class ScoreL2 extends SequentialCommandGroup {
 
-public class ScoreL3 extends SequentialCommandGroup {
-
-  public ScoreL3(ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem, IntakeCoralSubsystem intakeCoralSubsystem) {
+  public ScoreL2(ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem, IntakeCoralSubsystem intakeCoralSubsystem) {
     addCommands(
       new ParallelCommandGroup(
-        new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT),
+        new GoToHeight(elevatorSubsystem, ElevatorConstants.L2_HEIGHT),
         new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
       ).until(() -> elevatorSubsystem.atSetpoint()),
 
       new ParallelCommandGroup(
-        new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT),
+        new GoToHeight(elevatorSubsystem, ElevatorConstants.L2_HEIGHT),
         new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3),
 
         new SequentialCommandGroup(

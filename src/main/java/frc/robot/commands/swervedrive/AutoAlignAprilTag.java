@@ -21,7 +21,7 @@ public class AutoAlignAprilTag extends Command {
     DoubleSupplier xSpeed;
     DoubleSupplier ySpeed;
     DoubleSupplier zSpeed;    
-    double tagSetPoint;
+    int tagSetPoint;
     
 
     PIDController pidHeadingTag = new PIDController(0, 0, 0);
@@ -38,7 +38,7 @@ public class AutoAlignAprilTag extends Command {
   @Override
   public void initialize() {
     pidHeadingTag.reset();
-    tagSetPoint = -1.0;
+    tagSetPoint = -1;
     zSpeed = () -> 0.0;
   }
 
@@ -47,12 +47,15 @@ public class AutoAlignAprilTag extends Command {
   public void execute() {
 
     if (LimelightHelpers.getTV("limelight")) {
-      tagSetPoint = LimelightHelpers.getFiducialID("limelight");
-      
+      tagSetPoint = (int)LimelightHelpers.getFiducialID("limelight");
+
     }
 
     if (tagSetPoint != -1.0) {
-      zSpeed = () -> pidHeadingTag.calculate(swerveSubsystem.getHeading().getDegrees(),tagSetPoint);
+      zSpeed = () -> pidHeadingTag.calculate(
+        swerveSubsystem.getHeading().getDegrees(),
+        swerveSubsystem.getTagPose(tagSetPoint)
+      );
     }
 
     swerveSubsystem.driveCommand(xSpeed, ySpeed, zSpeed);
