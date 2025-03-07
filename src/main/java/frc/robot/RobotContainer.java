@@ -148,8 +148,8 @@ public class RobotContainer
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
     wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.3));
     climb.setDefaultCommand(new RunCommand(() -> climb.setClimbVoltage(0), climb));
-    // commandsXboxController();
-    commandsHIDController();
+    commandsXboxController();
+    // commandsHIDController();
   }
 
   private void commandsHIDController() {

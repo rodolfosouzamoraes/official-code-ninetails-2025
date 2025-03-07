@@ -41,7 +41,6 @@ public class ScoreL4 extends SequentialCommandGroup {
         new GoToHeight(elevatorSubsystem, 0.0),
         new GoToAngleWrist(wristSubsystem, 0.0)
       ).until(() -> elevatorSubsystem.atSetpoint())
-
     );
   }
 }
