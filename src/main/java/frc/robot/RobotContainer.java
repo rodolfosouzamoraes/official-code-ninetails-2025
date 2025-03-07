@@ -4,40 +4,31 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.ButtonMonitor;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.units.measure.AngularMomentum;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.Joystick.ButtonType;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.auto.CollectCoral;
+import frc.robot.commands.auto.ScoreL2;
 import frc.robot.commands.auto.ScoreL3;
+import frc.robot.commands.auto.ScoreL4;
 import frc.robot.commands.elevator.GoToHeight;
 import frc.robot.commands.intake.GoToAngleWrist;
-import frc.robot.commands.swervedrive.AutoAlignAprilTag;
-import frc.robot.commands.swervedrive.AutoAlignToAngle;
-import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
+import frc.robot.subsystems.climb.ClimbSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.intake.IntakeAlgaeSubsystem;
 import frc.robot.subsystems.intake.IntakeCoralSubsystem;
@@ -67,6 +58,7 @@ public class RobotContainer
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final IntakeAlgaeSubsystem intakeAlgae = new IntakeAlgaeSubsystem();
   private final IntakeCoralSubsystem intakeCoral = new IntakeCoralSubsystem();
+  private final ClimbSubsystem climb = new ClimbSubsystem();
   private final WristSubsystem wrist = new WristSubsystem();
 
   private final Field2d field = new Field2d();
@@ -84,7 +76,6 @@ public class RobotContainer
     configurePathChooser();
     DriverStation.silenceJoystickConnectionWarning(true);
 
-    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
   }
 
   private void configureLog() {
@@ -108,66 +99,45 @@ public class RobotContainer
 
   }
 
-
-
-  private void configureNamedCommand() 
-  {
-    NamedCommands.registerCommand(
-      "Score L3",
-      new ScoreL3(elevator, wrist, intakeCoral)
-    );
-    
-    // NamedCommands.registerCommand("Wrist Point Position",
-    // getAutonomousCommand());
-    
-    // NamedCommands.registerCommand("Shooter Coral",
-    // getAutonomousCommand());
-  
-    // NamedCommands.registerCommand("Collect Algae",
-    // getAutonomousCommand());
-  
-    // NamedCommands.registerCommand("Collect Coral",
-    // getAutonomousCommand());
-  
-    // NamedCommands.registerCommand("Go to L3",
-    // getAutonomousCommand());
-  
-    // NamedCommands.registerCommand("Go to L4",
-    // getAutonomousCommand());
-  
-  }
-
-
   private void configureBindings()
   {
-    driverControllerBindings();
+    // driverControllerBindings();
     operatorControllerBindings(); 
   }
 
 
 
-  private void driverControllerBindings() {
+  // private void driverControllerBindings() {
 
-    driverXbox.a().whileTrue(new AutoAlignAprilTag(
-      drivebase, 
-      () -> driverXbox.getLeftY() * -1,
-      () -> driverXbox.getLeftX() * -1
-    ));
+  //   driverXbox.a().whileTrue(new AutoAlignAprilTag(
+  //     drivebase, 
+  //     () -> driverXbox.getLeftY() * -1,
+  //     () -> driverXbox.getLeftX() * -1
+  //   ));
 
-    driverXbox.rightBumper().whileTrue(new AutoAlignToAngle(
-      drivebase,
-      () -> driverXbox.getLeftY() * -1,
-      () -> driverXbox.getLeftX() * -1,
-      -125
-    ));
+  //   // driverXbox.rightBumper().whileTrue(new AutoAlignToAngle(
+  //   //   drivebase,
+  //   //   () -> driverXbox.getLeftY() * -1,
+  //   //   () -> driverXbox.getLeftX() * -1,
+  //   //   -125
+  //   // ));
 
-    driverXbox.leftBumper().whileTrue(new AutoAlignToAngle(
-      drivebase,
-      () -> driverXbox.getLeftY() * -1,
-      () -> driverXbox.getLeftX() * -1,
-      125
-    ));
-  }
+    
+  //   driverXbox.leftBumper().whileTrue(new RunCommand( 
+  //     () -> drivebase.autoAlignToAngle(
+  //       driverXbox.getLeftY() * -1,
+  //       driverXbox.getLeftX() * -1,
+  //       125), drivebase
+  //   ));
+
+
+  //   // driverXbox.leftBumper().whileTrue(new AutoAlignToAngle(
+  //   //   drivebase,
+  //   //   () -> driverXbox.getLeftY() * -1,
+  //   //   () -> driverXbox.getLeftX() * -1,
+  //   //   125
+  //   // ));
+  // }
 
 
 
@@ -177,11 +147,10 @@ public class RobotContainer
     intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0), intakeAlgae));
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
     wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.3));
-
+    climb.setDefaultCommand(new RunCommand(() -> climb.setClimbVoltage(0), climb));
     // commandsXboxController();
     commandsHIDController();
   }
-
 
   private void commandsHIDController() {
     // Coletar Alga 
@@ -223,6 +192,14 @@ public class RobotContainer
       new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT),
       new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L4)
     ));
+
+    // CLimb
+    operatorHID.button(ButtonConstants.CLIMB).whileTrue(
+      new RunCommand(() -> climb.setClimbVoltage(14), climb));
+
+    // Unclimb
+    operatorHID.button(ButtonConstants.UNCLIMB).whileTrue(
+      new RunCommand(() -> climb.setClimbVoltage(-14), climb));
   }
 
   private void commandsXboxController() {
@@ -271,19 +248,15 @@ public class RobotContainer
     ));
   }
 
-
-
   public void setDriveMode()
   {
     configureBindings();
   }
 
-
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);
   }
-
 
   private void configureSwerve() {
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
@@ -297,17 +270,28 @@ public class RobotContainer
 
     Command driveFieldOrientedAnglularSlowVelocity = drivebase.driveFieldOriented(
         SwerveInputStream.of(drivebase.getSwerveDrive(),
-      () -> driverXbox.getLeftY() * -1,
-      () -> driverXbox.getLeftX() * -1)
-            .withControllerRotationAxis(() -> driverXbox.getRightX() * -0.75)
+      () -> driverXbox.getLeftY() * -0.5,
+      () -> driverXbox.getLeftX() * -0.5)
+            .withControllerRotationAxis(() -> driverXbox.getRightX() * -0.5)
         .deadband(0.2)
         .scaleTranslation(0.8)
         .allianceRelativeControl(true));
+
+    Command driveFieldOrientedAnglularCollect = drivebase.driveFieldOriented(
+      SwerveInputStream.of(drivebase.getSwerveDrive(),
+    () -> driverXbox.getLeftY() * -1,
+    () -> driverXbox.getLeftX() * -1)
+          .withControllerRotationAxis(() -> driverXbox.getRightX() * -0.75)
+      .deadband(0.2)
+      .scaleTranslation(0.8)
+      .allianceRelativeControl(true));
 
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     
     driverXbox.leftTrigger(0.1).whileTrue(driveFieldOrientedAnglularSlowVelocity);
     
+    driverXbox.rightTrigger(0.1).whileTrue(driveFieldOrientedAnglularCollect);
+
   }
 
   public static CommandXboxController getDriverXbox() {
@@ -321,17 +305,44 @@ public class RobotContainer
   public static SwerveSubsystem getSwerveSubsystem() {
     return drivebase;
   }
-  
+
+  private void configureNamedCommand() 
+  {
+
+    NamedCommands.registerCommand(
+     "Collect Coral",
+     new CollectCoral(intakeCoral, wrist)
+    );
+
+    NamedCommands.registerCommand(
+     "Score L2",
+     new ScoreL2(elevator, wrist, intakeCoral)
+    );
+
+    NamedCommands.registerCommand(
+     "Score L3",
+     new ScoreL3(elevator, wrist, intakeCoral)
+    );
+
+    NamedCommands.registerCommand(
+     "Score L4",
+     new ScoreL4(elevator, wrist, intakeCoral)
+    );
+
+  }
+
   public void configurePathChooser() {
     SmartDashboard.putData("Autonomous Chooses", pathChooser);
-    pathChooser.setDefaultOption("Nenhum", null);
+    pathChooser.setDefaultOption("Stay", "Stay");
+    pathChooser.addOption("Go Out Zone", "Go Out Zone");
     pathChooser.addOption("Middle Right Coral", "Middle Right Coral");
+    pathChooser.addOption("Middle Left Coral", "Middle Left Coral");
+    pathChooser.addOption("Left Coral", "Left Coral");
+    pathChooser.addOption("Right Coral", "Right Coral");
   }
 
   public Command getAutonomousCommand()
   {
-    // An example command will be run in autonomous
-    
     return drivebase.getAutonomousCommand(pathChooser.getSelected());
   }
 }

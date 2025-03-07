@@ -24,32 +24,23 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.vision.LimelightHelpers;
-import frc.robot.subsystems.vision.LimelightHelpers.LimelightResults;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -765,5 +756,23 @@ public class SwerveSubsystem extends SubsystemBase
 
     Pose3d tagPose = aprilTagFieldLayout.getTagPose(tagID).orElse(null);
     return (tagPose != null) ? Units.radiansToDegrees(tagPose.getRotation().getZ()) : -1;
+
+  }
+
+  private PIDController pidAutoAlignAngle = new PIDController(3, 0, 0);
+
+  public void resetPID() {
+    pidAutoAlignAngle.reset();
+  }
+
+
+  public void autoAlignToAngle(double _xSpeed, double _ySpeed, double angleSetpoint) {
+
+    final double xSpeed = Math.abs(pidAutoAlignAngle.getError()) > Math.abs(angleSetpoint)/2 ? _xSpeed / 2 : _xSpeed;
+    final double ySpeed = Math.abs(pidAutoAlignAngle.getError()) > Math.abs(angleSetpoint)/2 ? _xSpeed / 2 : _ySpeed;
+    double zSpeed = pidAutoAlignAngle.calculate(getHeading().getDegrees(), angleSetpoint);
+
+
+    driveCommand(() -> xSpeed, () -> ySpeed, () -> zSpeed);
   }
 }

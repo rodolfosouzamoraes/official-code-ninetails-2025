@@ -6,20 +6,15 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.UsbCameraInfo;
-import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.vision.LimelightHelpers;
 import frc.robot.util.Elastic;
 
 /**
@@ -31,7 +26,7 @@ public class Robot extends TimedRobot
 {
 
   private static Robot   instance;
-  private        Command m_autonomousCommand;
+  private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
 
@@ -150,7 +145,6 @@ public class Robot extends TimedRobot
     // this line or comment it out.
 
     Elastic.selectTab("Teleoperated");
-
     if (m_autonomousCommand != null)
     {
       m_autonomousCommand.cancel();

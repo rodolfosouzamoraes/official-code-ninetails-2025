@@ -51,16 +51,16 @@ public final class Constants
 
   public static class ElevatorConstants
   {
-    public static final int CHANNEL_A = 4;  // Fio Azul
-    public static final int CHANNEL_B = 5;  // Fio Amarelo
+    public static final int CHANNEL_A = 0;  // Fio Azul
+    public static final int CHANNEL_B = 1;  // Fio Amarelo
     
     public static final int ID_LEFT_MOTOR = 14;
     public static final int ID_RIGHT_MOTOR = 15;
     
    
-    public static final double L2_HEIGHT = 16;
-    public static final double L3_HEIGHT = 57;
-    public static final double L3_BALL_HEIGHT = 100;
+    public static final double L2_HEIGHT = 5;
+    public static final double L3_HEIGHT = 48;
+    public static final double L3_BALL_HEIGHT = 90;
     public static final double L4_HEIGHT = 116.2;
     
 
@@ -78,10 +78,10 @@ public final class Constants
 
     public static final int ID_WRIST_MOTOR = 19;
 
-    public static final double POSITION_ANGLE_WRIST_COLLECTION = 1.45;
+    public static final double POSITION_ANGLE_WRIST_COLLECTION = 2.0;
     public static final double POSITION_ANGLE_WRIST_L1 = 3.0;
-    public static final double POSITION_ANGLE_WRIST_L2_L3 = 3.2;
-    public static final double POSITION_ANGLE_WRIST_L4 = 1;
+    public static final double POSITION_ANGLE_WRIST_L2_L3 = 3.0;
+    public static final double POSITION_ANGLE_WRIST_L4 = 3;
 
   }
 
@@ -98,6 +98,15 @@ public final class Constants
     public static final int GO_TO_L3 = 6;
     public static final int GO_TO_L4 = 3;
 
+    public static final int CLIMB = 2;
+    public static final int UNCLIMB = 7;
+
+
+  }
+
+  public static class ClimbConstants
+  {
+    public static final int ID_CLIMB = 20;
   }
 
 }
