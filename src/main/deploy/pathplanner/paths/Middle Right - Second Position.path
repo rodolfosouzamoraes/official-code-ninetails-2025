@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7312499999999988,
-        "y": 0.751
+        "x": 1.731,
+        "y": 0.7511443661971816
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.049295774647886,
-        "y": 1.3463908450704207
+        "x": 3.0490457746478867,
+        "y": 1.3465352112676023
       },
       "isLocked": false,
       "linkedName": "End First Coral Station"

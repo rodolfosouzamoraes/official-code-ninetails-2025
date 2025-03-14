@@ -13,6 +13,7 @@ import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.Elastic;
@@ -67,11 +68,12 @@ public class Robot extends TimedRobot
 
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  
+    UsbCamera camera = CameraServer.startAutomaticCapture();  
+    camera.setResolution(320, 180);
+    camera.setFPS(40);
+    camera.setPixelFormat(PixelFormat.kYUYV); 
 
-  UsbCamera camera = CameraServer.startAutomaticCapture();
-  camera.setResolution(320, 180);
-  camera.setFPS(40);
-  camera.setPixelFormat(PixelFormat.kYUYV); 
 }
 
   /**

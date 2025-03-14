@@ -4,6 +4,8 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -16,11 +18,11 @@ public class CollectCoral extends SequentialCommandGroup {
   public CollectCoral(IntakeCoralSubsystem intakeCoral, WristSubsystem wristSubsystem) {
 
     addCommands(
-      new RunCommand(() -> intakeCoral.setCoralSpeed(0.7), intakeCoral),
-      new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION),
-
-      new WaitCommand(1),
-      new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral)
+      new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION).until(() -> wristSubsystem.atSetpoint()),
+      new InstantCommand(() -> intakeCoral.setCoralSpeed(0.7), intakeCoral),
+      new WaitCommand(2),
+      new InstantCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral),
+      new GoToAngleWrist(wristSubsystem, 0.3).withTimeout(0.25)
     );
   }
 }

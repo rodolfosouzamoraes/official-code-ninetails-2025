@@ -155,7 +155,7 @@ public class RobotContainer
   private void commandsHIDController() {
     // Coletar Alga 
     operatorHID.button(ButtonConstants.COLLECT_ALGAE).whileTrue(
-      new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.5), intakeAlgae));
+      new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.8), intakeAlgae));
 
     // Atirar alga
     operatorHID.button(ButtonConstants.SHOOTER_ALGAE).whileTrue(
@@ -174,7 +174,7 @@ public class RobotContainer
     // Go To L2
     operatorHID.button(ButtonConstants.GO_TO_L2).whileTrue(new ParallelCommandGroup(
       new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
+      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2)
     ));
 
       // Go To Ball L3
@@ -184,7 +184,7 @@ public class RobotContainer
     // Go To L3
     operatorHID.button(ButtonConstants.GO_TO_L3).whileTrue(new ParallelCommandGroup(
       new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
+      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L3)
     ));
 
     // Go To L4
@@ -224,7 +224,7 @@ public class RobotContainer
     // Go To L2
     operatorControllerXbox.x().whileTrue(new ParallelCommandGroup(
       new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
+      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2)
     ));
 
     // NÃO SEI
@@ -238,7 +238,7 @@ public class RobotContainer
     // Go To L3
     operatorControllerXbox.a().whileTrue(new ParallelCommandGroup(
       new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
+      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L3)
     ));
 
     // Go To L4

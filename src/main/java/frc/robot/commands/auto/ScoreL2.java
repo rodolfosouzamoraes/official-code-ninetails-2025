@@ -22,12 +22,12 @@ public class ScoreL2 extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new GoToHeight(elevatorSubsystem, ElevatorConstants.L2_HEIGHT),
-        new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3)
+        new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L2)
       ).until(() -> elevatorSubsystem.atSetpoint()),
 
       new ParallelCommandGroup(
         new GoToHeight(elevatorSubsystem, ElevatorConstants.L2_HEIGHT),
-        new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L2_L3),
+        new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L2),
 
         new SequentialCommandGroup(
           new WaitCommand(0.25), // Tempo de espera para chegar na posição
