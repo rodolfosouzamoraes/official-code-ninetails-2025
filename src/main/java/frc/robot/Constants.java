@@ -57,11 +57,13 @@ public final class Constants
     public static final int ID_LEFT_MOTOR = 14;
     public static final int ID_RIGHT_MOTOR = 15;
     
-   
-    public static final double L2_HEIGHT = 5;
-    public static final double L3_HEIGHT = 52;
+    public static final double COLLECT_HEIGHT = 17;    
+    public static final double L2_HEIGHT = 20;
+    public static final double L3_HEIGHT = 64;
+    // L3 -  52
+    // L2 -  10
     public static final double L3_BALL_HEIGHT = 90;
-    public static final double L4_HEIGHT = 116.2;
+    public static final double L4_HEIGHT = 110;
     
 
     public static final double MAX_ENCODER = 5120;
@@ -78,10 +80,10 @@ public final class Constants
 
     public static final int ID_WRIST_MOTOR = 19;
 
-    public static final double POSITION_ANGLE_WRIST_COLLECTION = 2.0;
-    public static final double POSITION_ANGLE_WRIST_L2 = 3.6;
-    public static final double POSITION_ANGLE_WRIST_L3 = 4.0;
-    public static final double POSITION_ANGLE_WRIST_L4 = 3;
+    public static final double POSITION_ANGLE_WRIST_COLLECTION = 0.55;
+    public static final double POSITION_ANGLE_WRIST_L2 = 2.8;
+    public static final double POSITION_ANGLE_WRIST_L3 = 3.0;
+    public static final double POSITION_ANGLE_WRIST_L4 = 3.5;
 
   }
 

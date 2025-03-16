@@ -20,7 +20,7 @@ public class CollectCoral extends SequentialCommandGroup {
     addCommands(
       new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION).until(() -> wristSubsystem.atSetpoint()),
       new InstantCommand(() -> intakeCoral.setCoralSpeed(0.7), intakeCoral),
-      new WaitCommand(2),
+      new WaitCommand(4),
       new InstantCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral),
       new GoToAngleWrist(wristSubsystem, 0.3).withTimeout(0.25)
     );

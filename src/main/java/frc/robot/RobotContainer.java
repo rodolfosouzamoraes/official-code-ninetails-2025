@@ -143,10 +143,10 @@ public class RobotContainer
 
   private void operatorControllerBindings() {
 
-    elevator.setDefaultCommand(new GoToHeight(elevator, 0));    
+    elevator.setDefaultCommand(new GoToHeight(elevator, 0));
     intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0), intakeAlgae));
     intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
-    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.3));
+    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.2));
     climb.setDefaultCommand(new RunCommand(() -> climb.setClimbVoltage(0), climb));
     // commandsXboxController();
     commandsHIDController();
@@ -165,7 +165,7 @@ public class RobotContainer
     operatorHID.button(ButtonConstants.COLLECT_CORAL).whileTrue(new ParallelCommandGroup(
         new RunCommand(() -> intakeCoral.setCoralSpeed(0.5), intakeCoral),
         new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION)
-    ));
+        ));
 
     // Atirar Coral
     operatorHID.button(ButtonConstants.SHOOTER_CORAL).whileTrue(
@@ -188,10 +188,7 @@ public class RobotContainer
     ));
 
     // Go To L4
-    operatorHID.button(ButtonConstants.GO_TO_L4).whileTrue(new ParallelCommandGroup(
-      new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L4)
-    ));
+    operatorHID.button(ButtonConstants.GO_TO_L4).whileTrue(  new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT)      );
 
     // CLimb
     operatorHID.button(ButtonConstants.CLIMB).whileTrue(

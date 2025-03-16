@@ -20,15 +20,15 @@ import frc.robot.subsystems.intake.WristSubsystem;
 public class ScoreL3 extends SequentialCommandGroup {
 
   public ScoreL3(ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem, IntakeCoralSubsystem intakeCoralSubsystem) {
-    addCommands(
+    addCommands(  
       new ParallelCommandGroup(
-        new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT),
-        new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L3)
+        new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L3),
+        new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT)
       ).until(() -> elevatorSubsystem.atSetpoint()),
 
       new ParallelCommandGroup(
-        new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT),
         new GoToAngleWrist(wristSubsystem, IntakeConstants.POSITION_ANGLE_WRIST_L3),
+        new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT),
 
         new SequentialCommandGroup(
           new WaitCommand(0.25), // Tempo de espera para chegar na posição
