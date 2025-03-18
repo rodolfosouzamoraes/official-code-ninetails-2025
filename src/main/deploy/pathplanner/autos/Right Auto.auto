@@ -7,7 +7,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right - Position"
+            "pathName": "1st - Initial Right"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "1st - Right Score"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoScoreL3"
+                }
+              }
+            ]
           }
         },
         {
@@ -17,13 +36,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Score L3"
+                  "name": "AutoCollectCoral"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right - First Score - L4"
+                  "pathName": "1st - Right Collect"
                 }
               }
             ]
@@ -32,29 +51,23 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right - First Coral Station"
+            "pathName": "2nd - Initial Right"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Right - Second Position"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Score L3"
+                  "name": "AutoScoreL3"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right - Second Score - L4"
+                  "pathName": "2nd - Right Score"
                 }
               }
             ]
