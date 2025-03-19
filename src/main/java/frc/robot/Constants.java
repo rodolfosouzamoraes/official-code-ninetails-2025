@@ -69,8 +69,8 @@ public final class Constants
   public static class ShooterConstants
   {
 
-    public static final int ID_BOTTOM_MOTOR = 18;
-    public static final int ID_TOP_MOTOR = 19;
+    public static final int ID_BOTTOM_MOTOR = 16;
+    public static final int ID_TOP_MOTOR = 17;
 
   }
 

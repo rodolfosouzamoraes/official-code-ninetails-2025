@@ -133,7 +133,9 @@ public class RobotContainer
   private void operatorControllerBindings() {
 
     elevator.setDefaultCommand(new GoToHeight(elevator, 0));
+    // elevator.setDefaultCommand(new RunCommand(() -> elevator.controlElevatorJoystick(-10), elevator));
     shooter.setDefaultCommand(shooter.stopShooter());
+
 
     // commandsXboxController();
     commandsHIDController();
@@ -145,8 +147,7 @@ public class RobotContainer
       .onTrue(new ShooterCollect(shooter));
 
     // Atirar Coral
-    operatorHID.button(ButtonConstants.SHOOTER_CORAL).whileTrue(
-      new RunCommand(() -> shooter.setShooterSpeed(1), shooter));
+    operatorHID.button(ButtonConstants.SHOOTER_CORAL).whileTrue(shooter.setShooterSpeed(1));
 
     // Go To L2
     operatorHID.button(ButtonConstants.GO_TO_L2)

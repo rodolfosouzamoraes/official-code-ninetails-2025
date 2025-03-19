@@ -35,12 +35,12 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomMotorConfig = new SparkMaxConfig();
 
     topMotorConfig
-      .smartCurrentLimit(20, 40)
+      .smartCurrentLimit(40, 60)
       .idleMode(IdleMode.kBrake)
-      .inverted(false);
+      .inverted(true);
 
     bottomMotorConfig
-      .smartCurrentLimit(20, 40)
+      .smartCurrentLimit(40, 60)
       .idleMode(IdleMode.kBrake)
       .follow(ShooterConstants.ID_TOP_MOTOR, true)
       .inverted(false);
