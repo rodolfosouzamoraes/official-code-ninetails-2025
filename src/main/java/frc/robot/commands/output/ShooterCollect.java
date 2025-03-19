@@ -10,13 +10,13 @@ public class ShooterCollect extends SequentialCommandGroup {
     addCommands(
 
       outPutSubsystem.setShooterSpeed(1)
-        .until(outPutSubsystem.isCoralTrue()).andThen(outPutSubsystem.stopShooter()),
+        .until(outPutSubsystem.isCoralTrue()),
 
       outPutSubsystem.setShooterSpeed(0.5)
-        .until(outPutSubsystem.isCoraFalse()).andThen(outPutSubsystem.stopShooter()),
+        .until(outPutSubsystem.isCoraFalse()),
 
-      outPutSubsystem.setShooterSpeed(-0.6)
-        .until(outPutSubsystem.isCoralTrue()).andThen(outPutSubsystem.stopShooter())
+      outPutSubsystem.setShooterSpeed(-0.4)
+        .until(outPutSubsystem.isCoralTrue())
 
     );
   }

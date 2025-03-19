@@ -60,7 +60,7 @@ public final class Constants
     public static final double L2_HEIGHT = 20;
     public static final double L3_HEIGHT = 64;
     public static final double L3_BALL_HEIGHT = 90;
-    public static final double L4_HEIGHT = 110;
+    public static final double L4_HEIGHT = 107;
     
     public static final double MAX_ENCODER = 5120;
     

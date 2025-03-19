@@ -63,12 +63,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     encoder = new Encoder(ElevatorConstants.CHANNEL_A, ElevatorConstants.CHANNEL_B, false, EncodingType.k4X);
     encoder.reset();
     encoder.setDistancePerPulse(108.5/5280.0);
-    constraints = new TrapezoidProfile.Constraints(3, 7.0);
-    pidController = new ProfiledPIDController(0.4, 0.0, 0.0, constraints);
+    constraints = new TrapezoidProfile.Constraints(5, 8.0);
+    pidController = new ProfiledPIDController(0.4, 8.0, 0.004, constraints);
     pidController.setTolerance(1);
-    pidController.setIZone(3);
+    pidController.setIZone(6);
 
-    feedforward = new ElevatorFeedforward(0.0, 2.0, 1, 0.05);
+    feedforward = new ElevatorFeedforward(0.14, 1.0, 1.5, 0.05);
 
     leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rightMotor.configure(rightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
