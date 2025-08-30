@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.auto.AutoScoreL3;
+import frc.robot.commands.auto.AutoScoreL4;
 import frc.robot.commands.elevator.GoToHeight;
 import frc.robot.commands.output.ShooterCollect;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
@@ -59,9 +60,10 @@ public class RobotContainer
     // Configure the trigger bindings
     
     configureLog();
-    configureBindings();
+    //configureBindings();
+    operatorControllerBindings();
     configureSwerve();
-    configureNamedCommand();
+    configureCommandReef();
     configurePathChooser();
     DriverStation.silenceJoystickConnectionWarning(true);
 
@@ -131,14 +133,15 @@ public class RobotContainer
 
 
   private void operatorControllerBindings() {
+    operatorDefaultCommand();
+    // commandsXboxController();
+    commandsHIDController();
+  }
 
+  private void operatorDefaultCommand(){
     elevator.setDefaultCommand(new GoToHeight(elevator, 0));
     // elevator.setDefaultCommand(new RunCommand(() -> elevator.controlElevatorJoystick(-10), elevator));
     shooter.setDefaultCommand(shooter.stopShooter());
-
-
-    // commandsXboxController();
-    commandsHIDController();
   }
 
   private void commandsHIDController() {
@@ -249,7 +252,7 @@ public class RobotContainer
     return drivebase;
   }
 
-  private void configureNamedCommand() 
+  private void configureCommandReef() 
   {
 
     NamedCommands.registerCommand(
@@ -264,7 +267,7 @@ public class RobotContainer
     
     NamedCommands.registerCommand(
      "AutoScoreL4",
-     new AutoScoreL3(elevator, shooter)
+     new AutoScoreL4(elevator, shooter)
     );
 
   }
