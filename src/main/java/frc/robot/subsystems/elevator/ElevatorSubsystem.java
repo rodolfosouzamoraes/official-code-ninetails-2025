@@ -62,19 +62,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     encoder = new Encoder(ElevatorConstants.CHANNEL_A, ElevatorConstants.CHANNEL_B, false, EncodingType.k4X);
     encoder.reset();
-    encoder.setDistancePerPulse(118.0/5360.0);
-    constraints = new TrapezoidProfile.Constraints(3, 1);
-    pidController = new ProfiledPIDController(0.3, 0.5, 0.005, constraints);
-    pidController.setTolerance(1.55);
-    pidController.setIZone(5);
-    
-    // pidController = new PIDController(0.2, 0.1, 0.02);
-    // pidController.setTolerance(1);
-    // pidController.reset();
+    encoder.setDistancePerPulse(108.5/5280.0);
+    constraints = new TrapezoidProfile.Constraints(5, 8.0);
+    pidController = new ProfiledPIDController(0.4, 8.0, 0.004, constraints);
+    pidController.setTolerance(1);
+    pidController.setIZone(6);
 
-    // feedforward = new ElevatorFeedforward(0, 0.12, 23.86, 0.01);
-    // kg 0.12 - kV 23.86 - kA 0.01
-    feedforward = new ElevatorFeedforward(0.005, 0.8, 15, 0.07);
+    feedforward = new ElevatorFeedforward(0.14, 1.0, 1.5, 0.05);
 
     leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rightMotor.configure(rightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -105,7 +99,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void controlElevatorJoystick(double output) {
-    leftMotor.set(output*0.5);
+    leftMotor.setVoltage(output);
   }
 
   public double getEncoderDistance() {

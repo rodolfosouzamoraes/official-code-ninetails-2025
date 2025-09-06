@@ -21,18 +21,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.commands.auto.CollectCoral;
-import frc.robot.commands.auto.ScoreL2;
-import frc.robot.commands.auto.ScoreL3;
-import frc.robot.commands.auto.ScoreL4;
+import frc.robot.commands.auto.AutoScoreL3;
+import frc.robot.commands.auto.AutoScoreL4;
 import frc.robot.commands.elevator.GoToHeight;
-import frc.robot.commands.intake.GoToAngleWrist;
-import frc.robot.subsystems.climb.ClimbSubsystem;
+import frc.robot.commands.output.ShooterCollect;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.intake.IntakeAlgaeSubsystem;
-import frc.robot.subsystems.intake.IntakeCoralSubsystem;
-import frc.robot.subsystems.intake.WristSubsystem;
+import frc.robot.subsystems.output.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 import java.io.File;
@@ -56,11 +50,7 @@ public class RobotContainer
                                                                                 "swerve"));
 
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
-  private final IntakeAlgaeSubsystem intakeAlgae = new IntakeAlgaeSubsystem();
-  private final IntakeCoralSubsystem intakeCoral = new IntakeCoralSubsystem();
-  private final ClimbSubsystem climb = new ClimbSubsystem();
-  private final WristSubsystem wrist = new WristSubsystem();
-
+  private final ShooterSubsystem shooter = new ShooterSubsystem();
   private final Field2d field = new Field2d();
 
   private final SendableChooser<String> pathChooser = new SendableChooser<>();
@@ -70,9 +60,10 @@ public class RobotContainer
     // Configure the trigger bindings
     
     configureLog();
-    configureBindings();
+    //configureBindings();
+    operatorControllerBindings();
     configureSwerve();
-    configureNamedCommand();
+    configureCommandReef();
     configurePathChooser();
     DriverStation.silenceJoystickConnectionWarning(true);
 
@@ -142,91 +133,51 @@ public class RobotContainer
 
 
   private void operatorControllerBindings() {
-
-    elevator.setDefaultCommand(new GoToHeight(elevator, 0));
-    intakeAlgae.setDefaultCommand(new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0), intakeAlgae));
-    intakeCoral.setDefaultCommand(new RunCommand(() -> intakeCoral.setCoralSpeed(0.0), intakeCoral));
-    wrist.setDefaultCommand(new GoToAngleWrist(wrist, 0.2));
-    climb.setDefaultCommand(new RunCommand(() -> climb.setClimbVoltage(0), climb));
+    operatorDefaultCommand();
     // commandsXboxController();
     commandsHIDController();
   }
 
+  private void operatorDefaultCommand(){
+    elevator.setDefaultCommand(new GoToHeight(elevator, 0));
+    // elevator.setDefaultCommand(new RunCommand(() -> elevator.controlElevatorJoystick(-10), elevator));
+    shooter.setDefaultCommand(shooter.stopShooter());
+  }
+
   private void commandsHIDController() {
-    // Coletar Alga 
-    operatorHID.button(ButtonConstants.COLLECT_ALGAE).whileTrue(
-      new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.8), intakeAlgae));
-
-    // Atirar alga
-    operatorHID.button(ButtonConstants.SHOOTER_ALGAE).whileTrue(
-      new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
-
     // Coletar Coral
-    operatorHID.button(ButtonConstants.COLLECT_CORAL).whileTrue(new ParallelCommandGroup(
-        new RunCommand(() -> intakeCoral.setCoralSpeed(0.5), intakeCoral),
-        new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION)
-        ));
+    operatorHID.button(ButtonConstants.COLLECT_CORAL)
+      .onTrue(new ShooterCollect(shooter));
 
     // Atirar Coral
-    operatorHID.button(ButtonConstants.SHOOTER_CORAL).whileTrue(
-      new RunCommand(() -> intakeCoral.setCoralSpeed(-0.5), intakeCoral));
+    operatorHID.button(ButtonConstants.SHOOTER_CORAL).whileTrue(shooter.setShooterSpeed(1));
 
     // Go To L2
-    operatorHID.button(ButtonConstants.GO_TO_L2).whileTrue(new ParallelCommandGroup(
-      new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2)
-    ));
-
-      // Go To Ball L3
-    operatorHID.button(ButtonConstants.GO_TO_BALL_L3).whileTrue(
-      new GoToHeight(elevator, ElevatorConstants.L3_BALL_HEIGHT));
+    operatorHID.button(ButtonConstants.GO_TO_L2)
+      .whileTrue(new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT));
 
     // Go To L3
-    operatorHID.button(ButtonConstants.GO_TO_L3).whileTrue(new ParallelCommandGroup(
-      new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L3)
-    ));
+    operatorHID.button(ButtonConstants.GO_TO_L3)
+      .whileTrue(new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT));
 
     // Go To L4
-    operatorHID.button(ButtonConstants.GO_TO_L4).whileTrue(  new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT)      );
+    operatorHID.button(ButtonConstants.GO_TO_L4)
+      .whileTrue(new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT));
 
-    // CLimb
-    operatorHID.button(ButtonConstants.CLIMB).whileTrue(
-      new RunCommand(() -> climb.setClimbVoltage(14), climb));
-
-    // Unclimb
-    operatorHID.button(ButtonConstants.UNCLIMB).whileTrue(
-      new RunCommand(() -> climb.setClimbVoltage(-14), climb));
   }
 
   private void commandsXboxController() {
-    // Coletar Alga
-    operatorControllerXbox.rightBumper().whileTrue(
-      new RunCommand(() -> intakeAlgae.setAlgaeSpeed(0.5), intakeAlgae));
-
-    // Atirar alga
-    operatorControllerXbox.rightTrigger().whileTrue(
-      new RunCommand(() -> intakeAlgae.setAlgaeSpeed(-0.5), intakeAlgae));
 
     // Coletar Coral
-    operatorControllerXbox.leftBumper().whileTrue(new ParallelCommandGroup(
-        new RunCommand(() -> intakeCoral.setCoralSpeed(0.5), intakeCoral),
-        new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_COLLECTION)
-    ));
+    operatorControllerXbox.leftBumper();
 
     // Atirar Coral
-    operatorControllerXbox.leftTrigger().whileTrue(
-      new RunCommand(() -> intakeCoral.setCoralSpeed(-0.5), intakeCoral));
+    operatorControllerXbox.leftTrigger();
 
     // Go To L2
     operatorControllerXbox.x().whileTrue(new ParallelCommandGroup(
-      new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L2)
+      new GoToHeight(elevator, ElevatorConstants.L2_HEIGHT)
     ));
-
-    // NÃO SEI
-    operatorControllerXbox.y().whileTrue(
-      new GoToAngleWrist(wrist, 3.2));
 
     // Go To Ball L3
     operatorControllerXbox.povRight().whileTrue(
@@ -234,14 +185,12 @@ public class RobotContainer
 
     // Go To L3
     operatorControllerXbox.a().whileTrue(new ParallelCommandGroup(
-      new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L3)
+      new GoToHeight(elevator, ElevatorConstants.L3_HEIGHT)
     ));
 
     // Go To L4
     operatorControllerXbox.b().whileTrue(new ParallelCommandGroup(
-      new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT),
-      new GoToAngleWrist(wrist, IntakeConstants.POSITION_ANGLE_WRIST_L4)
+      new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT)
     ));
   }
 
@@ -303,27 +252,22 @@ public class RobotContainer
     return drivebase;
   }
 
-  private void configureNamedCommand() 
+  private void configureCommandReef() 
   {
 
     NamedCommands.registerCommand(
-     "Collect Coral",
-     new CollectCoral(intakeCoral, wrist)
+     "AutoCollectCoral",
+     new ShooterCollect(shooter)
     );
-
+    
     NamedCommands.registerCommand(
-     "Score L2",
-     new ScoreL2(elevator, wrist, intakeCoral)
+     "AutoScoreL3",
+     new AutoScoreL3(elevator, shooter)
     );
-
+    
     NamedCommands.registerCommand(
-     "Score L3",
-     new ScoreL3(elevator, wrist, intakeCoral)
-    );
-
-    NamedCommands.registerCommand(
-     "Score L4",
-     new ScoreL4(elevator, wrist, intakeCoral)
+     "AutoScoreL4",
+     new AutoScoreL4(elevator, shooter)
     );
 
   }
