@@ -95,7 +95,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     double outputPID = pidController.calculate(getEncoderDistance());
     double outputFeedForward = feedforward.calculate(pidController.getSetpoint().velocity);
     double output = outputPID + outputFeedForward;
-    leftMotor.setVoltage(-output);
+    leftMotor.setVoltage(-output*0.3); //Redução da movimentação do elevador para 30%
   }
 
   public void controlElevatorJoystick(double output) {
