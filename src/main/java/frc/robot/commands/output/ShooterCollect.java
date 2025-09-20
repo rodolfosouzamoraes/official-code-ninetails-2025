@@ -16,8 +16,9 @@ public class ShooterCollect extends SequentialCommandGroup {
         .until(outPutSubsystem.isCoraFalse()),
 
       outPutSubsystem.setShooterSpeed(-0.4)
-        .until(outPutSubsystem.isCoralTrue())
+        .until(outPutSubsystem.isCoralTrue()),
 
+      outPutSubsystem.setShooterSpeed(0.2).withTimeout(0.2)
     );
   }
 }

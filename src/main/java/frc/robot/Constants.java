@@ -57,10 +57,10 @@ public final class Constants
     public static final int ID_LEFT_MOTOR = 14;
     public static final int ID_RIGHT_MOTOR = 15;
     
-    public static final double L2_HEIGHT = 20;
-    public static final double L3_HEIGHT = 64;
+    public static final double L2_HEIGHT = 15;
+    public static final double L3_HEIGHT = 50;
     public static final double L3_BALL_HEIGHT = 90;
-    public static final double L4_HEIGHT = 107;
+    public static final double L4_HEIGHT = 110;
     
     public static final double MAX_ENCODER = 5120;
     

@@ -64,8 +64,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     encoder.reset();
     encoder.setDistancePerPulse(108.5/5280.0);
     constraints = new TrapezoidProfile.Constraints(5, 8.0);
-    pidController = new ProfiledPIDController(0.4, 8.0, 0.004, constraints);
-    pidController.setTolerance(1);
+    pidController = new ProfiledPIDController(0.7, 30.0, 0.004, constraints);
+    pidController.setTolerance(0.5);
     pidController.setIZone(6);
 
     feedforward = new ElevatorFeedforward(0.14, 1.0, 1.5, 0.05);

@@ -92,7 +92,7 @@ public class RobotContainer
 
   private void configureBindings()
   {
-    // driverControllerBindings();
+    // driverControllerBindings();       //-> Alinhar com a AprilTag
     operatorControllerBindings(); 
   }
 
@@ -166,7 +166,7 @@ public class RobotContainer
 
   }
 
-  private void commandsXboxController() {
+  private void commandsXboxController() { //Controle Xbox para o intake
 
     // Coletar Coral
     operatorControllerXbox.leftBumper();
@@ -209,7 +209,7 @@ public class RobotContainer
       SwerveInputStream.of(drivebase.getSwerveDrive(),
     () -> driverXbox.getLeftY() * -3,
     () -> driverXbox.getLeftX() * -3)
-          .withControllerRotationAxis(() -> driverXbox.getRightX() * -2)
+          .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
       .deadband(0.2)
       .scaleTranslation(0.8)
       .allianceRelativeControl(true));
@@ -279,7 +279,9 @@ public class RobotContainer
     pathChooser.addOption("Middle Right Coral", "Middle Right Coral");
     pathChooser.addOption("Middle Left Coral", "Middle Left Coral");
     pathChooser.addOption("Left Coral", "Left Coral");
-    pathChooser.addOption("Right Coral", "Right Coral");
+    pathChooser.addOption("Right Coral", "Right Auto L3");
+    pathChooser.addOption("Teste", "Teste");
+
   }
 
   public Command getAutonomousCommand()
