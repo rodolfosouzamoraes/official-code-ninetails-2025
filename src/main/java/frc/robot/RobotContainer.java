@@ -279,7 +279,7 @@ public class RobotContainer
     pathChooser.addOption("Middle Right Coral", "Middle Right Coral");
     pathChooser.addOption("Middle Left Coral", "Middle Left Coral");
     pathChooser.addOption("Left Coral", "Left Coral");
-    pathChooser.addOption("Right Coral", "Right Auto L3");
+    pathChooser.addOption("Right Coral", "Right Auto");
     pathChooser.addOption("Teste", "Teste");
 
   }

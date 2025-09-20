@@ -64,11 +64,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     encoder.reset();
     encoder.setDistancePerPulse(108.5/5280.0);
     constraints = new TrapezoidProfile.Constraints(5, 8.0);
-    pidController = new ProfiledPIDController(0.7, 30.0, 0.004, constraints);
-    pidController.setTolerance(0.5);
+    pidController = new ProfiledPIDController(0.6, 60.0, 0.004, constraints);
+    pidController.setTolerance(3);
     pidController.setIZone(6);
 
-    feedforward = new ElevatorFeedforward(0.14, 1.0, 1.5, 0.05);
+
+    feedforward = new ElevatorFeedforward(0.25, 1.2, 1.5, 0.05);
 
     leftMotor.configure(leftMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rightMotor.configure(rightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -81,7 +82,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Elevator/Encoder Elevador Rate", getEncoderRate());
     // SmartDashboard.putNumber("Elevator/Elevator SetPoint", pidController.getSetpoint().position);
     SmartDashboard.putNumber("Elevator/Elevator SetPoint", pidController.getSetpoint().position);
-  
+    SmartDashboard.putBoolean("Elevator/Elevator atSetpooint",  atSetpoint());
+    SmartDashboard.putNumber("Elevator/Elevator error", pidController.getPositionError());
+
   }
 
 
