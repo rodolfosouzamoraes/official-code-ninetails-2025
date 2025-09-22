@@ -223,6 +223,15 @@ public class RobotContainer
         .scaleTranslation(0.8)
         .allianceRelativeControl(true));
 
+    Command driveFieldOrientedAnglularFastVelocity = drivebase.driveFieldOriented(
+        SwerveInputStream.of(drivebase.getSwerveDrive(),
+      () -> driverXbox.getLeftY() * -5,
+      () -> driverXbox.getLeftX() * -5)
+            .withControllerRotationAxis(() -> driverXbox.getRightX() * -3)
+        .deadband(0.2)
+        .scaleTranslation(0.8)
+        .allianceRelativeControl(true));
+
     Command driveFieldOrientedAnglularCollect = drivebase.driveFieldOriented(
       SwerveInputStream.of(drivebase.getSwerveDrive(),
     () -> driverXbox.getLeftY() * -1,
@@ -238,6 +247,7 @@ public class RobotContainer
     
     driverXbox.rightTrigger(0.1).whileTrue(driveFieldOrientedAnglularCollect);
 
+    driverXbox.rightBumper().whileTrue(driveFieldOrientedAnglularFastVelocity);
   }
 
   public static CommandXboxController getDriverXbox() {
@@ -274,14 +284,11 @@ public class RobotContainer
 
   public void configurePathChooser() {
     SmartDashboard.putData("Autonomous Chooses", pathChooser);
-    pathChooser.setDefaultOption("Stay", "Stay");
-    pathChooser.addOption("Go Out Zone", "Go Out Zone");
-    pathChooser.addOption("Middle Right Coral", "Middle Right Coral");
-    pathChooser.addOption("Middle Left Coral", "Middle Left Coral");
-    pathChooser.addOption("Left Coral", "Left Coral");
-    pathChooser.addOption("Right Coral", "Right Auto");
-    pathChooser.addOption("Teste", "Teste");
-
+    pathChooser.setDefaultOption("Stay", "Stay Auto");
+    pathChooser.addOption("Go Out Auto", "Go Out Auto");
+    pathChooser.addOption("Center Auto L3", "Center Auto L3");
+    pathChooser.addOption("Center Auto L4", "Center Auto L4");
+    pathChooser.addOption("Right Auto L3", "Right Auto L3");
   }
 
   public Command getAutonomousCommand()

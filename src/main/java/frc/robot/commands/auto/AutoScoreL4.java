@@ -29,7 +29,7 @@ public class AutoScoreL4 extends SequentialCommandGroup {
         new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT),
         new SequentialCommandGroup(
           new WaitCommand(0.25),  // Tempo para chegar até o reef 
-          new InstantCommand(() -> shooterSubsystem.setShooterSpeed(1), shooterSubsystem)
+          shooterSubsystem.setShooterSpeed(1)
         )
       ).withTimeout(1),
 

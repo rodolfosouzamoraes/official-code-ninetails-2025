@@ -55,6 +55,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shooter Coral/Velocity Shooter", topMotor.getAbsoluteEncoder().getVelocity());
+    SmartDashboard.putBoolean("Shooter Coral/Coral ON", isCoralTrue().getAsBoolean());
   }
 
   public Command setShooterSpeed(double shooterSpeed) {

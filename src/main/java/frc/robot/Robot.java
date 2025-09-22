@@ -4,7 +4,14 @@
 
 package frc.robot;
 
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
@@ -69,10 +76,55 @@ public class Robot extends TimedRobot
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   
-    UsbCamera camera = CameraServer.startAutomaticCapture();  
-    camera.setResolution(320, 180);
-    camera.setFPS(40);
-    camera.setPixelFormat(PixelFormat.kYUYV); 
+    // UsbCamera camera = CameraServer.startAutomaticCapture();  
+    // camera.setResolution(320, 180);
+    // camera.setFPS(40);
+
+    // CvSink cvSink = CameraServer.getVideo();
+
+    // CvSource outputStream = CameraServer.putVideo("Processed", 640, 480);
+
+    new Thread(() -> {
+      
+      UsbCamera camera = CameraServer.startAutomaticCapture();  
+      camera.setResolution(320, 180);
+      camera.setFPS(40);
+
+      CvSink cvSink = CameraServer.getVideo();
+
+      CvSource outputStream = CameraServer.putVideo("Processed", 320, 180);
+
+      Mat mat = new Mat();
+
+      while (!Thread.interrupted()) {
+        long frameTime = cvSink.grabFrame(mat);
+
+        if (frameTime == 0) {
+          outputStream.notifyError(cvSink.getError());
+          continue;
+        }
+
+        Imgproc.rectangle(mat,
+          new Point(mat.width()/2-10, 0),
+          new Point(mat.width()/2+10, mat.height()),
+          new Scalar(0, 255, 0),
+        2
+        );
+
+        Imgproc.line(mat, 
+          new Point(mat.width()/2-40, mat.height()/2-10),
+          new Point(mat.width()/2+40, mat.height()/2-10),
+          new Scalar(255, 0, 0),
+          2);
+
+        // Imgproc.line(mat, 
+        // new Point(100, 100),
+        // new Point(300, 300),
+        // new Scalar(0, 255, 0),2);
+
+          outputStream.putFrame(mat);
+      }
+    }).start();
 
 }
 
