@@ -22,11 +22,11 @@ public class AutoScoreL4 extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT)
+      new GoToHeight(elevatorSubsystem, ElevatorConstants.L4_HEIGHT)
         .until(() -> elevatorSubsystem.atSetpoint()),
 
       new ParallelCommandGroup(
-        new GoToHeight(elevatorSubsystem, ElevatorConstants.L3_HEIGHT),
+        new GoToHeight(elevatorSubsystem, ElevatorConstants.L4_HEIGHT),
         new SequentialCommandGroup(
           new WaitCommand(0.25),  // Tempo para chegar até o reef 
           shooterSubsystem.setShooterSpeed(1)

@@ -112,8 +112,8 @@ public class Robot extends TimedRobot
         );
 
         Imgproc.line(mat, 
-          new Point(mat.width()/2-40, mat.height()/2-10),
-          new Point(mat.width()/2+40, mat.height()/2-10),
+          new Point(mat.width()/2-60, mat.height()/2-10),
+          new Point(mat.width()/2+60, mat.height()/2-10),
           new Scalar(255, 0, 0),
           2);
 
