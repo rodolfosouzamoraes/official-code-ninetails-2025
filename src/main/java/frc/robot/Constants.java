@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -83,6 +84,27 @@ public final class Constants
     public static final int GO_TO_L2 = 5;
     public static final int GO_TO_L3 = 6;
     public static final int GO_TO_L4 = 3;
+
+    public static final int ALIGN_LEFT_REEF = 2;
+    public static final int ALIGN_RIGHT_REEF = 7;
+
+  }
+
+  public class FieldConstants {
+    public static final Rotation2d CORAL_STATION_LEFT = Rotation2d.fromDegrees(-45);
+    public static final Rotation2d CORAL_STATION_RIGHT = Rotation2d.fromDegrees(45);
+
+    public static final Rotation2d REEF_FOWARD = Rotation2d.fromDegrees(0);
+    public static final Rotation2d REEF_BACKWARD = Rotation2d.fromDegrees(180);
+
+    public static final Rotation2d REEF_LEFT_SIDE = Rotation2d.fromDegrees(-90);
+    public static final Rotation2d REEF_RIGHT_SIDE = Rotation2d.fromDegrees(90);
+
+    public static final Rotation2d REEF_RIGHT_DOWN_SIDE = Rotation2d.fromDegrees(45);
+    public static final Rotation2d REEF_RIGHT_UP_SIDE = Rotation2d.fromDegrees(135);
+
+    public static final Rotation2d REEF_LEFT_DOWN_SIDE = Rotation2d.fromDegrees(-45);
+    public static final Rotation2d REEF_LEFT_UP_SIDE = Rotation2d.fromDegrees(-135);
 
   }
 

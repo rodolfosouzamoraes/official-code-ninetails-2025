@@ -7,20 +7,25 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ButtonConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.auto.AutoScoreL3;
 import frc.robot.commands.auto.AutoScoreL4;
 import frc.robot.commands.elevator.GoToHeight;
@@ -31,6 +36,9 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 import java.io.File;
 
+import org.dyn4j.geometry.Rotation;
+
+import swervelib.SwerveController;
 import swervelib.SwerveInputStream;
 
 public class RobotContainer
@@ -164,6 +172,14 @@ public class RobotContainer
     operatorHID.button(ButtonConstants.GO_TO_L4)
       .whileTrue(new GoToHeight(elevator, ElevatorConstants.L4_HEIGHT));
 
+    operatorHID.button(ButtonConstants.ALIGN_LEFT_REEF)
+      .whileTrue(lockHeadingWhileDriving(FieldConstants.CORAL_STATION_LEFT))
+      .onTrue(new ShooterCollect(shooter));
+      
+    operatorHID.button(ButtonConstants.ALIGN_RIGHT_REEF)
+      .whileTrue(lockHeadingWhileDriving(FieldConstants.CORAL_STATION_RIGHT))
+      .onTrue(new ShooterCollect(shooter));
+
   }
 
   private void commandsXboxController() { //Controle Xbox para o intake
@@ -248,7 +264,40 @@ public class RobotContainer
     driverXbox.rightTrigger(0.1).whileTrue(driveFieldOrientedAnglularCollect);
 
     driverXbox.rightBumper().whileTrue(driveFieldOrientedAnglularFastVelocity);
+
+    driverXbox.a().whileTrue(lockHeadingWhileDriving(FieldConstants.REEF_BACKWARD));
+    driverXbox.y().whileTrue(lockHeadingWhileDriving(FieldConstants.REEF_FOWARD));
+    driverXbox.b().whileTrue(lockHeadingWhileDriving(FieldConstants.REEF_LEFT_SIDE));
+    driverXbox.x().whileTrue(lockHeadingWhileDriving(FieldConstants.REEF_RIGHT_SIDE));
+
+    driverXbox.leftBumper().and(driverXbox.a()).whileTrue(lockHeadingWhileDriving(FieldConstants.REEF_RIGHT_DOWN_SIDE));
+    driverXbox.leftBumper().and(driverXbox.b()).whileTrue(lockHeadingWhileDriving(FieldConstants.REEF_RIGHT_UP_SIDE));
+    driverXbox.leftBumper().and(driverXbox.x()).whileTrue(lockHeadingWhileDriving(FieldConstants.REEF_LEFT_DOWN_SIDE));
+    driverXbox.leftBumper().and(driverXbox.y()).whileTrue(lockHeadingWhileDriving(FieldConstants.REEF_LEFT_UP_SIDE));
+
   }
+
+  public Command lockHeadingWhileDriving(Rotation2d targetHeading) {
+    SwerveController controller = drivebase.getSwerveDrive().getSwerveController();
+
+    return new RunCommand(() -> {
+
+      ChassisSpeeds	speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        -driverXbox.getLeftY() * 2,
+        -driverXbox.getLeftX() * 2,
+        controller.headingCalculate(
+          drivebase.getHeading().getRadians(),
+          targetHeading.getRadians()
+        ),
+        drivebase.getHeading()
+      );
+
+      drivebase.drive(speeds);
+    },
+    drivebase);
+  }
+
+
 
   public static CommandXboxController getDriverXbox() {
     return driverXbox;

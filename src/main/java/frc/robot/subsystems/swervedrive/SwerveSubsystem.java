@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.Constants.FieldConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -261,11 +262,12 @@ public class SwerveSubsystem extends SubsystemBase
   public Command aimAtSpeaker(double tolerance)
   {
     SwerveController controller = swerveDrive.getSwerveController();
+
     return run(
         () -> {
           ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0,
                                                    controller.headingCalculate(getHeading().getRadians(),
-                                                                               getSpeakerYaw().getRadians()),
+                                                                                getSpeakerYaw().getRadians()),
                                                                        getHeading());
           drive(speeds);
         }).until(() -> Math.abs(getSpeakerYaw().minus(getHeading()).getDegrees()) < tolerance);
@@ -776,4 +778,5 @@ public class SwerveSubsystem extends SubsystemBase
 
     driveCommand(() -> xSpeed, () -> ySpeed, () -> zSpeed);
   }
+
 }
